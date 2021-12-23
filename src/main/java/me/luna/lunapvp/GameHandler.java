@@ -7,10 +7,10 @@ import org.bukkit.WorldBorder;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 public class GameHandler {
-	private WorldBorder worldBorder;	
-	private main plugin;
-	private Server server;
-	private World world;
+	private final WorldBorder worldBorder;
+	private final main plugin;
+	private final Server server;
+	private final World world;
 	public GameHandler(main p) {
 		this.server = p.getServer();
 		this.world = p.getServer().getWorld("world");
@@ -44,12 +44,14 @@ public class GameHandler {
         worldBorder.setWarningTime(20);
     }
     
-    private void shrinkBorder() {
+    public void shrinkBorder() {
     	if((worldBorder.getSize() > 500)){
             shrinkWorldBorder(worldBorder.getSize() / 2,300);
+            return;
         }
         shrinkWorldBorder(worldBorder.getSize() - 100,120);
     }
+/*
     protected void startGameTimer(main p){
     	AirDrop airdrop = new AirDrop();
         initializeWorldBorder();
@@ -65,5 +67,7 @@ public class GameHandler {
                 p.getServer().broadcastMessage("Worldborder: " + worldBoderSizeString + "\nHead To 0,0");
             }
         }.runTaskTimer(p,20,8400);
-    }
+        }
+ */
+
 }

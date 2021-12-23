@@ -49,7 +49,7 @@ public class AirDrop {
         for(int i = 0; i < 5; i++) {
             block.getBlockInventory().addItem(generateRandomItem());
         }
-        s.broadcastMessage("Airdrop has been droppped at: " + Integer.toString(chestLocation.getBlockX()) + ", " + Integer.toString(chestLocation.getBlockZ()));
+        s.broadcastMessage("Airdrop has been droppped at: " + chestLocation.getBlockX() + ", " + chestLocation.getBlockZ());
     }
 
 

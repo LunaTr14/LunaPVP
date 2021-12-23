@@ -33,9 +33,6 @@ public class AbilityTemplate {
     protected boolean checkCooldown(){
 
         System.out.println(System.currentTimeMillis() - cooldownTime);
-        if(System.currentTimeMillis() - cooldownTime > 10000){
-            return true;
-        }
-        return false;
+        return System.currentTimeMillis() - cooldownTime > 10000;
     }
 }

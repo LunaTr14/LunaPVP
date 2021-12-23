@@ -11,60 +11,56 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.util.HashMap;
 import java.util.LinkedList;
 
 public class EventHandler implements Listener {
-    private LinkedList<playerInstance> playerList = new LinkedList<playerInstance>();
     public boolean isPVPAllowed = false;
-    private main plugin;
-    private Server server;
+    private final main plugin;
+    private final Server server;
     public EventHandler(main m) {
     	this.plugin = m;
     	this.server = m.getServer();
     }
     private void setPlayerDeath(Player p) {
-    	for(playerInstance playerObject : playerList) {
+    	for(playerObjectTemplate playerObject : plugin.playerInstanceList) {
     		if(server.getPlayer(playerObject.getPlayer()) == p) {
     			playerObject.setPlayerDeathStatus(true);
     		}
     	}
     }
-    private boolean checkIfPlayeIsDead(Player p) {
-    	for(playerInstance playerObject : playerList) {
+    
+    private boolean checkIfPlayerIsDead(Player p) {
+    	for(playerObjectTemplate playerObject : plugin.playerInstanceList) {
     		if(server.getPlayer(playerObject.getPlayer()) == p && playerObject.isPlayerDead()) {
     			return true;
     		}
     	}
 		return false;
     }
-    
+
     private boolean isPlayerHoldingStick (Player e) {
-    	if(e.getInventory().getItemInMainHand().getType() == Material.STICK) {
-    		return true;
-    	}
-    	return false;
+        return e.getInventory().getItemInMainHand().getType() == Material.STICK;
     }
-    
     private boolean isActionRightClick(PlayerInteractEvent e) {
-    	if(e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK) return true;
-    	return false;
+        return e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK;
     }
     
     private boolean isAttackingPlayerValid(Player attacker, Player recipient) {
-    	if(attacker != recipient) return true;
-    	return false;
+        return attacker != recipient;
     }
+
     @org.bukkit.event.EventHandler
     public void onPlayerHit(EntityDamageByEntityEvent e){
         if(e.getEntity() instanceof Player && e.getDamager() instanceof Player && isPVPAllowed) {
             Player damager = (Player) e.getDamager();
             Player reciever = (Player) e.getEntity();
             if(!isPlayerHoldingStick(damager) || !isAttackingPlayerValid(damager, reciever))return;
-            for(playerInstance playerClass : playerList) {
-            	if(server.getPlayer(playerClass.getPlayer()) == e.getDamager()) {
+            for(playerObjectTemplate playerClass : plugin.playerInstanceList) {
+            	if(server.getPlayer(playerClass.getPlayer()) == e.getDamager() && !playerClass.isPlayerErased() && !playerClass.getIsCompressed()) {
             		playerClass.getAbility().playerHitAbility(reciever);
             		return;
             	}
@@ -74,15 +70,11 @@ public class EventHandler implements Listener {
             e.setCancelled(true);
         }
     }
-    protected void updateAbilityList(LinkedList<playerInstance> abilityLinkedList){
-        this.playerList = abilityLinkedList;
-    }
-    
     @org.bukkit.event.EventHandler
     public void onRightClick(PlayerInteractEvent e){
         if(isPlayerHoldingStick(e.getPlayer()) && isPlayerHoldingStick(e.getPlayer()) && isActionRightClick(e)) {
-        	for(playerInstance playerClass : playerList) {
-        		if(server.getPlayer(playerClass.getPlayer()) == e.getPlayer()) {
+        	for(playerObjectTemplate playerClass : plugin.playerInstanceList) {
+        		if(server.getPlayer(playerClass.getPlayer()) == e.getPlayer() && !playerClass.isPlayerErased() && !playerClass.getIsCompressed()) {
         			playerClass.getAbility().activatedAbility();
         			return;
         		}
@@ -93,7 +85,7 @@ public class EventHandler implements Listener {
 
     @org.bukkit.event.EventHandler
     public void teleportPreventionEvent(PlayerTeleportEvent e){
-        if(e.getCause() == PlayerTeleportEvent.TeleportCause.SPECTATE && !checkIfPlayeIsDead(e.getPlayer())){
+        if(e.getCause() == PlayerTeleportEvent.TeleportCause.SPECTATE && !checkIfPlayerIsDead(e.getPlayer())){
             e.setCancelled(true);
         }
     }
