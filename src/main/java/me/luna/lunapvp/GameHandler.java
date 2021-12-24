@@ -51,7 +51,6 @@ public class GameHandler {
         }
         shrinkWorldBorder(worldBorder.getSize() - 100,120);
     }
-/*
     protected void startGameTimer(main p){
     	AirDrop airdrop = new AirDrop();
         initializeWorldBorder();
@@ -68,6 +67,5 @@ public class GameHandler {
             }
         }.runTaskTimer(p,20,8400);
         }
- */
 
 }
