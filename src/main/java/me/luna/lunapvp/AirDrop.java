@@ -1,3 +1,8 @@
+/*
+Created By: Luna T
+Edited Last: 29/3/2022
+Purpose: Creates Airdrops during the game
+*/
 package me.luna.lunapvp;
 
 import org.bukkit.Location;
@@ -30,7 +35,6 @@ public class AirDrop {
         return (rand.nextInt(limit * 2) - limit);
     }
     private Location getRandomLocation(){
-        Random rand = new Random();
         int xCoordinate = generateLimitedInt(500);
         int zCoordinate = generateLimitedInt(500);
         Location loc = new Location(w, xCoordinate, w.getHighestBlockYAt(xCoordinate,zCoordinate) + 1, zCoordinate);

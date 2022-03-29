@@ -1,3 +1,9 @@
+/*
+Created By: Luna T
+Edited Last: 29/3/2022
+Purpose: playerObject class to handle Player Actions and Status
+ */
+
 package me.luna.lunapvp;
 
 import java.util.Random;
@@ -11,10 +17,8 @@ public class playerObjectTemplate {
 	private AbilityTemplate ability;
 	private boolean playerDead = false;
 	private UUID playerUUID;
-	private String teamID = "";
-	private final int kills = 0;
+	private String teamID;
 	private boolean isErased = false;
-	private final boolean isCompressed = false;
 	
 	protected playerObjectTemplate() {
 		Random rand = new Random();
@@ -46,9 +50,6 @@ public class playerObjectTemplate {
 	}
 	public boolean isPlayerErased(){
 		return this.isErased;
-	}
-	public void setIsCompressed(boolean b){
-		this.isErased = b;
 	}
 	public boolean getIsCompressed(){
 		return this.isErased;

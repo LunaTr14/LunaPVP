@@ -1,3 +1,8 @@
+/*
+Created By: Luna T
+Edited Last: 29/3/2022
+Purpose: Handles Events like Player Hit, Movement
+*/
 package me.luna.lunapvp;
 
 import org.bukkit.GameMode;

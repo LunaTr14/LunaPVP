@@ -1,3 +1,9 @@
+/*
+Created By: Luna T
+Edited Last: 29/3/2022
+Purpose: Controls the Start, PvP and timing of game
+*/
+
 package me.luna.lunapvp;
 
 import org.bukkit.Location;
@@ -17,7 +23,7 @@ public class GameHandler {
 		this.worldBorder = p.getServer().getWorld("world").getWorldBorder();
 		this.plugin = p;
 	}
-	
+	// Teleport Players in the beginning of the game
     private void teleportPlayers(){
         for(Player player : server.getOnlinePlayers()){
             int highestBlock = server.getWorld("world").getHighestBlockYAt(0,0);
@@ -29,7 +35,7 @@ public class GameHandler {
         worldBorder.setSize(size,timeToShrink);
 
     }
-
+    // Resets Player Health, Inventory and Food Level
     private void resetPlayer(main plugin){
         for(Player p : server.getOnlinePlayers()){
             p.getInventory().clear();
@@ -37,13 +43,19 @@ public class GameHandler {
             p.setFoodLevel(25);
         }
     }
+
+    // Creates the World Border during the start of the game
     private void initializeWorldBorder() {
     	worldBorder.setCenter(0,0);
         worldBorder.setSize(2500);
         worldBorder.setWarningDistance(50);
         worldBorder.setWarningTime(20);
     }
-    
+    /*
+        Shrinks borders when game has a begun
+        If World Border is above 500 -> Devides by 2
+        If World Border is Below 500 ->  Minus 100
+     */
     public void shrinkBorder() {
     	if((worldBorder.getSize() > 500)){
             shrinkWorldBorder(worldBorder.getSize() / 2,300);
@@ -66,6 +78,5 @@ public class GameHandler {
                 p.getServer().broadcastMessage("Worldborder: " + worldBoderSizeString + "\nHead To 0,0");
             }
         }.runTaskTimer(p,20,8400);
-        }
-
+    }
 }
