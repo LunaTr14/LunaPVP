@@ -1,6 +1,6 @@
 /*
 Created By: Luna T
-Edited Last: 29/3/2022
+Edited Last: 25/4/2022
 Purpose: Main Function to start game
  */
 
@@ -10,6 +10,8 @@ package me.luna.lunapvp;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import me.luna.playerClasses.AbilityTemplate;
@@ -25,76 +27,75 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-public final class main extends JavaPlugin {
-    private EventHandler eventHandler;
-    private GameHandler gameHandler;
-    volatile public LinkedList<playerObjectTemplate> playerInstanceList = new LinkedList<playerObjectTemplate>();
-    protected boolean hasGameStarted = false;
-    long gameInitailiseTime;
+public final class Main extends JavaPlugin {
+    private PluginEventHandler plugin_event_handler;
+    private MinigameHandler minigame_event_handler;
+    volatile public LinkedList<PlayerTemplate> player_instance_list = new LinkedList<PlayerTemplate>();
+    protected boolean has_game_started = false;
+    long initial_game_time = 0;
     public void onEnable() {
-        playerInstanceList = new LinkedList<>();
-        eventHandler = new EventHandler(this);
-        gameHandler = new GameHandler(this);
-        this.getServer().getPluginManager().registerEvents(eventHandler, this);
+        player_instance_list = new LinkedList<>();
+        plugin_event_handler = new PluginEventHandler(this);
+        minigame_event_handler = new MinigameHandler(this);
+        this.getServer().getPluginManager().registerEvents(plugin_event_handler, this);
     }
-    private void chooseClass(Player sender, AbilityTemplate playerClass) {
+    private void choose_class(Player sender, AbilityTemplate playerClass) {
     	try {
-    		for(playerObjectTemplate playerObject : playerInstanceList) {
-    			if(playerObject.getPlayer() == sender.getUniqueId()){
-    				playerInstanceList.remove(playerObject);
+    		for(PlayerTemplate player_object : player_instance_list) {
+    			if(player_object.getPlayer() == sender.getUniqueId()){
+    				player_instance_list.remove(player_object);
     			}
     		}
     	}
     	catch (Exception e) {
 			System.out.println(e);
 		}
-    	playerObjectTemplate p = new playerObjectTemplate();
+    	PlayerTemplate player_template = new PlayerTemplate();
     	playerClass.setPlugin(this);
-    	p.updateClassDetails(sender, playerClass);
-    	this.playerInstanceList.add(p);
-        sender.sendMessage("You have picked: " + p.getAbility().getClassName());
+    	player_template.updateClassDetails(sender, playerClass);
+    	this.player_instance_list.add(player_template);
+        sender.sendMessage("You have picked: " + player_template.getAbility().getClassName());
     }
 
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(sender.isOp() && label.equalsIgnoreCase("start")) {
-            gameHandler.startGameTimer(this);
-            gameInitailiseTime = System.currentTimeMillis();
-            this.hasGameStarted = true;
+            initial_game_time = System.currentTimeMillis();
+            this.has_game_started = true;
             this.getServer().broadcastMessage("Use Wooden sticks to activate ability, \ndependent on your class it may be left click, right click or PlayerHit");
         }
         // Switch-Case to select Player's Class /ability [Class Name]
-            if(label.equalsIgnoreCase("ability") && args.length != 0 && sender instanceof Player && !hasGameStarted){
+            if(label.equalsIgnoreCase("ability") && args.length != 0 && sender instanceof Player && !has_game_started){
                 String argument0 = args[0].toLowerCase();
                 switch (argument0) {
                     case("miner"):
-                        chooseClass((Player) sender, new Miner());
+                        choose_class((Player) sender, new Miner());
                     case ("medusa"):
-                        chooseClass((Player) sender, new Medusa());
+                        choose_class((Player) sender, new Medusa());
                     case ("warp"):
-                        chooseClass((Player) sender, new Warp());
+                        choose_class((Player) sender, new Warp());
                     case ("ultradamage"):
-                        chooseClass((Player) sender, new UltraDamage());
+                        choose_class((Player) sender, new UltraDamage());
                     case ("ghost"):
-                        chooseClass((Player) sender, new Ghost());
+                        choose_class((Player) sender, new Ghost());
                     case ("gravity"):
-                        chooseClass((Player) sender, new Gravity());
+                        choose_class((Player) sender, new Gravity());
                     case ("cannon"):
-                        chooseClass((Player) sender, new Cannon());
+                        choose_class((Player) sender, new Cannon());
                 }
                 return true;
             }
             else if(label.equalsIgnoreCase("team") && args.length == 0 && sender instanceof Player) {
-            	for(playerObjectTemplate playerObject : playerInstanceList) {
-            		if(this.getServer().getPlayer(playerObject.getPlayer()) == sender) {
-            			this.getServer().getPlayer(playerObject.getPlayer()).sendMessage(playerObject.getTeamID());
+            	for(PlayerTemplate player_object : player_instance_list) {
+            		if(this.getServer().getPlayer(player_object.getPlayer()) == sender) {
+            			this.getServer().getPlayer(player_object.getPlayer()).sendMessage(player_object.getTeamID());
             			return true;
             		}
             	}
             }
             else if(label.equalsIgnoreCase("team") && args.length != 0 && sender instanceof Player){
-            	for(playerObjectTemplate p : playerInstanceList) {
+            	for(PlayerTemplate p : player_instance_list) {
             		p.setTeamID(args[0]);
             	}
                 sender.sendMessage("You have chosen Team: " + args[0]);
@@ -105,18 +106,7 @@ public final class main extends JavaPlugin {
     // Tab Completion for Class Selection
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        List<String> list = new ArrayList<>();
-        if(command.getName().equalsIgnoreCase("ability") && args.length == 1){
-            if(sender instanceof Player){
-                list.add("Gravity");
-                list.add("Ghost");
-                list.add("Cannon");
-                list.add("UltraDamage");
-                list.add("Warp");
-                list.add("Medusa");
-                list.add("Miner");
-            }
-        }
-        return list;
+        String[] on_completion_list = {"Gravity","Ghost","Cannon","UltraDamage","Warp","Medusa","Miner"};
+        return List.of(on_completion_list);
     }
 }

@@ -1,17 +1,18 @@
 package me.luna.playerClasses;
 
+import me.luna.lunapvp.Main;
 import org.bukkit.entity.Player;
 
-import me.luna.lunapvp.main;
+import me.luna.lunapvp.Main;
 
 public class AbilityTemplate {
     long cooldownTime = 0;
     protected Player player;
     String className = "";
-    main plugin;
+    Main plugin;
     int classID = 0;
 
-    public void setPlugin(main p) {
+    public void setPlugin(Main p) {
     	this.plugin = p;
     }
     public void activatedAbility(){

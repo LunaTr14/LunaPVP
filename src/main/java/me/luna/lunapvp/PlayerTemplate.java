@@ -1,6 +1,6 @@
 /*
 Created By: Luna T
-Edited Last: 29/3/2022
+Edited Last: 25/4/2022
 Purpose: playerObject class to handle Player Actions and Status
  */
 
@@ -13,46 +13,46 @@ import org.bukkit.entity.Player;
 
 import me.luna.playerClasses.AbilityTemplate;
 
-public class playerObjectTemplate {
+public class PlayerTemplate {
 	private AbilityTemplate ability;
-	private boolean playerDead = false;
-	private UUID playerUUID;
-	private String teamID;
-	private boolean isErased = false;
+	private boolean is_player_dead = false;
+	private UUID player_uuid;
+	private String team_id;
+	private boolean is_player_erased = false;
 	
-	protected playerObjectTemplate() {
+	protected PlayerTemplate() {
 		Random rand = new Random();
 		int randomInt = rand.nextInt(999) * rand.nextInt(999) *rand.nextInt(999);
-		this.teamID = Integer.toBinaryString(randomInt);
+		this.team_id = Integer.toBinaryString(randomInt);
 	}
 	protected void setPlayerDeathStatus(boolean isPlayerDead) {
-		this.playerDead = isPlayerDead;
+		this.is_player_dead = isPlayerDead;
 	}
 	protected void updateClassDetails(Player playerSpigotInstance, AbilityTemplate ability) {
 		this.ability = ability;
 		this.ability.setPlayer(playerSpigotInstance);
-		this.playerUUID = playerSpigotInstance.getUniqueId();
+		this.player_uuid = playerSpigotInstance.getUniqueId();
 	}
 	protected boolean isPlayerDead() {
-		return this.playerDead;
+		return this.is_player_dead;
 	}
 	protected String getTeamID() {
-		return this.teamID;
+		return this.team_id;
 	}
 	protected void setTeamID(String team) {
-		this.teamID = team;
+		this.team_id = team;
 	}
 	public UUID getPlayer() {
-		return this.playerUUID;
+		return this.player_uuid;
 	}
 	public void setIsErase(boolean b){
-		this.isErased = b;
+		this.is_player_erased = b;
 	}
 	public boolean isPlayerErased(){
-		return this.isErased;
+		return this.is_player_erased;
 	}
 	public boolean getIsCompressed(){
-		return this.isErased;
+		return this.is_player_erased;
 	}
 	protected AbilityTemplate getAbility() {
 		return ability;

@@ -1,6 +1,6 @@
 /*
 Created By: Luna T
-Edited Last: 29/3/2022
+Edited Last: 25/4/2022
 Purpose: Controls the Start, PvP and timing of game
 */
 
@@ -12,31 +12,31 @@ import org.bukkit.World;
 import org.bukkit.WorldBorder;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-public class GameHandler {
+public class MinigameHandler {
 	private final WorldBorder worldBorder;
-	private final main plugin;
+	private final Main plugin;
 	private final Server server;
 	private final World world;
-	public GameHandler(main p) {
+	public MinigameHandler(Main p) {
 		this.server = p.getServer();
 		this.world = p.getServer().getWorld("world");
 		this.worldBorder = p.getServer().getWorld("world").getWorldBorder();
 		this.plugin = p;
 	}
 	// Teleport Players in the beginning of the game
-    private void teleportPlayers(){
+    private void teleport_players(){
         for(Player player : server.getOnlinePlayers()){
             int highestBlock = server.getWorld("world").getHighestBlockYAt(0,0);
             player.teleport(new Location(player.getWorld(), 0,highestBlock + 1,0));
         }
     }
     
-    private void shrinkWorldBorder(double size, long timeToShrink){
+    private void shrink_world_border(double size, long timeToShrink){
         worldBorder.setSize(size,timeToShrink);
 
     }
     // Resets Player Health, Inventory and Food Level
-    private void resetPlayer(main plugin){
+    private void reset_player_conditions(Main plugin){
         for(Player p : server.getOnlinePlayers()){
             p.getInventory().clear();
             p.setHealth(20);
@@ -45,7 +45,7 @@ public class GameHandler {
     }
 
     // Creates the World Border during the start of the game
-    private void initializeWorldBorder() {
+    private void initialize_world_border() {
     	worldBorder.setCenter(0,0);
         worldBorder.setSize(2500);
         worldBorder.setWarningDistance(50);
@@ -56,25 +56,25 @@ public class GameHandler {
         If World Border is above 500 -> Devides by 2
         If World Border is Below 500 ->  Minus 100
      */
-    public void shrinkBorder() {
+    public void shrink_world_border() {
     	if((worldBorder.getSize() > 500)){
-            shrinkWorldBorder(worldBorder.getSize() / 2,300);
+            shrink_world_border(worldBorder.getSize() / 2,300);
             return;
         }
-        shrinkWorldBorder(worldBorder.getSize() - 100,120);
+        shrink_world_border(worldBorder.getSize() - 100,120);
     }
-    protected void startGameTimer(main p){
+    protected void start_game_timer(Main p){
     	AirDrop airdrop = new AirDrop();
-        initializeWorldBorder();
-        teleportPlayers();
-        airdrop.w = world;
-        resetPlayer(p);
+        initialize_world_border();
+        teleport_players();
+        airdrop.world_instance= world;
+        reset_player_conditions(p);
         new BukkitRunnable() {
             @Override
             public void run() {
-                shrinkBorder();
+                shrink_world_border();
                 String worldBoderSizeString = Double.toString(worldBorder.getSize());
-                airdrop.spawnAirDrop(p.getServer());
+                airdrop.spawn_airdrop(p.getServer());
                 p.getServer().broadcastMessage("Worldborder: " + worldBoderSizeString + "\nHead To 0,0");
             }
         }.runTaskTimer(p,20,8400);
