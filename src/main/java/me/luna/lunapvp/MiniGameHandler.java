@@ -12,12 +12,12 @@ import org.bukkit.World;
 import org.bukkit.WorldBorder;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-public class MinigameHandler {
+public class MiniGameHandler {
 	private final WorldBorder worldBorder;
 	private final Main plugin;
 	private final Server server;
 	private final World world;
-	public MinigameHandler(Main p) {
+	public MiniGameHandler(Main p) {
 		this.server = p.getServer();
 		this.world = p.getServer().getWorld("world");
 		this.worldBorder = p.getServer().getWorld("world").getWorldBorder();
@@ -67,14 +67,14 @@ public class MinigameHandler {
     	AirDrop airdrop = new AirDrop();
         initialize_world_border();
         teleport_players();
-        airdrop.world_instance= world;
+        airdrop.worldInstance= world;
         reset_player_conditions(p);
         new BukkitRunnable() {
             @Override
             public void run() {
                 shrink_world_border();
                 String worldBoderSizeString = Double.toString(worldBorder.getSize());
-                airdrop.spawn_airdrop(p.getServer());
+                airdrop.spawnAirdrop(p.getServer());
                 p.getServer().broadcastMessage("Worldborder: " + worldBoderSizeString + "\nHead To 0,0");
             }
         }.runTaskTimer(p,20,8400);

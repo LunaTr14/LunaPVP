@@ -23,23 +23,23 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 public class PluginEventHandler implements Listener {
-    public boolean is_pvp_enabled = false;
+    public boolean isPVPEnabled = false;
     private final Main plugin;
     private final Server server;
     public PluginEventHandler(Main m) {
     	this.plugin = m;
     	this.server = m.getServer();
     }
-    private void set_player_death(Player p) {
-    	for(PlayerTemplate playerObject : plugin.player_instance_list) {
+    private void setPlayerDeath(Player p) {
+    	for(PlayerTemplate playerObject : plugin.playerInstanceList) {
     		if(server.getPlayer(playerObject.getPlayer()) == p) {
     			playerObject.setPlayerDeathStatus(true);
     		}
     	}
     }
     
-    private boolean is_player_dead(Player p) {
-    	for(PlayerTemplate playerObject : plugin.player_instance_list) {
+    private boolean isPlayerDead(Player p) {
+    	for(PlayerTemplate playerObject : plugin.playerInstanceList) {
     		if(server.getPlayer(playerObject.getPlayer()) == p && playerObject.isPlayerDead()) {
     			return true;
     		}
@@ -47,38 +47,38 @@ public class PluginEventHandler implements Listener {
 		return false;
     }
 
-    private boolean is_player_holding_stick (Player e) {
+    private boolean isPlayerHoldingStick (Player e) {
         return e.getInventory().getItemInMainHand().getType() == Material.STICK;
     }
-    private boolean is_action_right_click(PlayerInteractEvent e) {
+    private boolean isActionRightClick(PlayerInteractEvent e) {
         return e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK;
     }
     
-    private boolean is_attack_valid(Player attacker, Player recipient) {
+    private boolean isAttackValid(Player attacker, Player recipient) {
         return attacker != recipient;
     }
 
     @org.bukkit.event.EventHandler
     public void on_player_hit(EntityDamageByEntityEvent e){
-        if(e.getEntity() instanceof Player && e.getDamager() instanceof Player && is_pvp_enabled) {
+        if(e.getEntity() instanceof Player && e.getDamager() instanceof Player && isPVPEnabled) {
             Player damager = (Player) e.getDamager();
             Player reciever = (Player) e.getEntity();
-            if(!is_player_holding_stick(damager) || !is_attack_valid(damager, reciever))return;
-            for(PlayerTemplate player_class : plugin.player_instance_list) {
-            	if(server.getPlayer(player_class.getPlayer()) == e.getDamager() && !player_class.isPlayerErased() && !player_class.getIsCompressed()) {
-            		player_class.getAbility().playerHitAbility(reciever);
+            if(!isPlayerHoldingStick(damager) || !isAttackValid(damager, reciever))return;
+            for(PlayerTemplate playerClass : plugin.playerInstanceList) {
+            	if(server.getPlayer(playerClass.getPlayer()) == e.getDamager() && !playerClass.isPlayerErased() && !playerClass.getIsCompressed()) {
+            		playerClass.getAbility().playerHitAbility(reciever);
             		return;
             	}
             }
         }
-        else if(e.getEntity() instanceof Player && e.getDamager() instanceof Player && !is_pvp_enabled){
+        else if(e.getEntity() instanceof Player && e.getDamager() instanceof Player && !isPVPEnabled){
             e.setCancelled(true);
         }
     }
     @org.bukkit.event.EventHandler
-    public void on_right_click(PlayerInteractEvent e){
-        if(is_player_holding_stick(e.getPlayer()) && is_player_holding_stick(e.getPlayer()) && is_action_right_click(e)) {
-        	for(PlayerTemplate playerClass : plugin.player_instance_list) {
+    public void onRightClick(PlayerInteractEvent e){
+        if(isPlayerHoldingStick(e.getPlayer()) && isPlayerHoldingStick(e.getPlayer()) && isActionRightClick(e)) {
+        	for(PlayerTemplate playerClass : plugin.playerInstanceList) {
         		if(server.getPlayer(playerClass.getPlayer()) == e.getPlayer() && !playerClass.isPlayerErased() && !playerClass.getIsCompressed()) {
         			playerClass.getAbility().activatedAbility();
         			return;
@@ -89,23 +89,23 @@ public class PluginEventHandler implements Listener {
     }
 
     @org.bukkit.event.EventHandler
-    public void on_teleport(PlayerTeleportEvent e){
-        if(e.getCause() == PlayerTeleportEvent.TeleportCause.SPECTATE && ! is_player_dead(e.getPlayer())){
+    public void onTeleport(PlayerTeleportEvent e){
+        if(e.getCause() == PlayerTeleportEvent.TeleportCause.SPECTATE && ! isPlayerDead(e.getPlayer())){
             e.setCancelled(true);
         }
     }
 
     @org.bukkit.event.EventHandler
-    public void on_death(PlayerDeathEvent e){
+    public void onDeath(PlayerDeathEvent e){
         Player p = e.getEntity();
-        if(plugin.has_game_started) {
-	        set_player_death(p);
+        if(plugin.hasGameStarted) {
+	        setPlayerDeath(p);
 	        p.setGameMode(GameMode.SPECTATOR);
         }
     }
     
     @org.bukkit.event.EventHandler
-    public void on_player_join(PlayerJoinEvent e) {
+    public void onPlayerJoin(PlayerJoinEvent e) {
     	e.getPlayer().sendMessage("Use /team to select team \nUse /ability to choose an ability");
     }
 }

@@ -3,8 +3,6 @@ package me.luna.playerClasses;
 import me.luna.lunapvp.Main;
 import org.bukkit.entity.Player;
 
-import me.luna.lunapvp.Main;
-
 public class AbilityTemplate {
     long cooldownTime = 0;
     protected Player player;
@@ -13,7 +11,7 @@ public class AbilityTemplate {
     int classID = 0;
 
     public void setPlugin(Main p) {
-    	this.plugin = p;
+        this.plugin = p;
     }
     public void activatedAbility(){
 
@@ -23,13 +21,13 @@ public class AbilityTemplate {
 
     }
     public void setPlayer(Player p) {
-    	this.player = p;
+        this.player = p;
     }
     public String getClassName() {
-    	return this.className;
+        return this.className;
     }
     public Player getPlayer(){
-    	return this.player;
+        return this.player;
     }
     protected boolean checkCooldown(){
 
