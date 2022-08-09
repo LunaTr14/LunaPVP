@@ -22,13 +22,17 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 import java.util.HashMap;
 import java.util.LinkedList;
 
-public class PluginEventHandler implements Listener {
+public class EventHandler implements Listener {
     public boolean isPVPEnabled = false;
-    private final Main plugin;
-    private final Server server;
-    public PluginEventHandler(Main m) {
-    	this.plugin = m;
-    	this.server = m.getServer();
+    private Main plugin;
+    private Server server;
+
+    protected void setPlugin(Main plugin){
+        this.plugin = plugin;
+    }
+
+    protected void setServer(Server server){
+        this.server = server;
     }
     private void setPlayerDeath(Player p) {
     	for(PlayerTemplate playerObject : plugin.playerInstanceList) {
@@ -37,7 +41,10 @@ public class PluginEventHandler implements Listener {
     		}
     	}
     }
-    
+
+    protected void registerHandler(){
+        server.getPluginManager().registerEvents(this,plugin);
+    }
     private boolean isPlayerDead(Player p) {
     	for(PlayerTemplate playerObject : plugin.playerInstanceList) {
     		if(server.getPlayer(playerObject.getPlayer()) == p && playerObject.isPlayerDead()) {

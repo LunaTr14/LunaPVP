@@ -13,13 +13,8 @@ public class AbilityTemplate {
     public void setPlugin(Main p) {
         this.plugin = p;
     }
-    public void activatedAbility(){
-
-    }
-
-    public void playerHitAbility(Player attackedPlayer){
-
-    }
+    public void activatedAbility(){}
+    public void playerHitAbility(Player attackedPlayer){}
     public void setPlayer(Player p) {
         this.player = p;
     }
@@ -30,7 +25,6 @@ public class AbilityTemplate {
         return this.player;
     }
     protected boolean checkCooldown(){
-
         System.out.println(System.currentTimeMillis() - cooldownTime);
         return System.currentTimeMillis() - cooldownTime > 10000;
     }

@@ -13,21 +13,32 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public final class Main extends JavaPlugin {
-    private volatile PluginEventHandler pluginEventHanlder;
-    private volatile MiniGameHandler miniGameHandler;
+    private volatile EventHandler eventHanlder;
+    private volatile GameController gameController;
     volatile public LinkedList<PlayerTemplate> playerInstanceList = new LinkedList<PlayerTemplate>();
+
+    private HashMap<String,Class> playerClasses = new HashMap<String,Class>();
     protected boolean hasGameStarted = false;
     long initialGameTime = 0;
     public void onEnable() {
         playerInstanceList = new LinkedList<>();
-        pluginEventHanlder = new PluginEventHandler(this);
-        miniGameHandler = new MiniGameHandler(this);
-        this.getServer().getPluginManager().registerEvents(pluginEventHanlder, this);
+
+        eventHanlder = new EventHandler();
+        eventHanlder.setPlugin(this);
+        eventHanlder.setServer(this.getServer());
+        eventHanlder.registerHandler();
+
+
+        gameController = new GameController();
+        gameController.setServer(this.getServer());
+        gameController.setWorld(this.getServer().getWorld("world"));
+        gameController.setPlugin(this);
     }
+
+
     private void chooseClass(Player sender, AbilityTemplate playerClass) {
     	try {
     		for(PlayerTemplate player_object : playerInstanceList) {
@@ -57,8 +68,8 @@ public final class Main extends JavaPlugin {
 
         // Switch-Case to select Player's Class /ability [Class Name]
             if(label.equalsIgnoreCase("ability") && args.length != 0 && sender instanceof Player && !hasGameStarted){
-                String argument0 = args[0].toLowerCase();
-                switch (argument0) {
+                String className = args[0].toLowerCase();
+                switch (className) {
                     case("miner"):
                         chooseClass((Player) sender, new Miner());
                     case ("medusa"):
