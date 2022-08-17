@@ -60,25 +60,34 @@ public class EventHandler implements Listener {
     private boolean isActionRightClick(PlayerInteractEvent e) {
         return e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK;
     }
-    
-    private boolean isAttackValid(Player attacker, Player recipient) {
+
+    // Is Attacker the same with Recipient
+    private boolean isSamePlayer(Player attacker, Player recipient) {
         return attacker != recipient;
     }
 
+    private boolean canPlayerBeHit(PlayerTemplate receiver){
+        return !receiver.isPlayerErased() && !receiver.getIsCompressed();
+    }
+
+    private boolean isObjectPlayer(Object obj){
+        return obj instanceof Player;
+    }
     @org.bukkit.event.EventHandler
-    public void on_player_hit(EntityDamageByEntityEvent e){
+    public void onPlayerHit(EntityDamageByEntityEvent e){
         if(e.getEntity() instanceof Player && e.getDamager() instanceof Player && isPVPEnabled) {
             Player damager = (Player) e.getDamager();
             Player reciever = (Player) e.getEntity();
-            if(!isPlayerHoldingStick(damager) || !isAttackValid(damager, reciever))return;
+            if(!isPlayerHoldingStick(damager) || !isSamePlayer(damager, reciever))return;
+
             for(PlayerTemplate playerClass : plugin.playerInstanceList) {
-            	if(server.getPlayer(playerClass.getPlayer()) == e.getDamager() && !playerClass.isPlayerErased() && !playerClass.getIsCompressed()) {
+            	if(server.getPlayer(playerClass.getPlayer()) == e.getDamager() && canPlayerBeHit(playerClass)) {
             		playerClass.getAbility().playerHitAbility(reciever);
             		return;
             	}
             }
         }
-        else if(e.getEntity() instanceof Player && e.getDamager() instanceof Player && !isPVPEnabled){
+        else if( isObjectPlayer(e.getEntity()) && isObjectPlayer(e.getDamager()) && !isPVPEnabled){
             e.setCancelled(true);
         }
     }
