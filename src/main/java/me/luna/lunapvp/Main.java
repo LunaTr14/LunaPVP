@@ -20,8 +20,7 @@ public final class Main extends JavaPlugin {
     private volatile GameController gameController;
     volatile public LinkedList<PlayerTemplate> playerInstanceList = new LinkedList<PlayerTemplate>();
 
-    private HashMap<String,Class> playerClasses = new HashMap<String,Class>();
-    protected boolean hasGameStarted = false;
+    protected boolean hasStarted = false;
     long initialGameTime = 0;
     public void onEnable() {
         playerInstanceList = new LinkedList<>();
@@ -37,9 +36,32 @@ public final class Main extends JavaPlugin {
         gameController.setWorld(this.getServer().getWorld("world"));
         gameController.setPlugin(this);
     }
+    private void selectClass(Player sender, String className){
+        switch (className) {
+            case("miner"):
+                setPlayerClass(sender, new Miner());
+            case ("medusa"):
+                setPlayerClass( sender, new Medusa());
+            case ("warp"):
+                setPlayerClass( sender, new Warp());
+            case ("ultradamage"):
+                setPlayerClass( sender, new UltraDamage());
+            case ("ghost"):
+                setPlayerClass( sender, new Ghost());
+            case ("gravity"):
+                setPlayerClass( sender, new Gravity());
+            case ("cannon"):
+                setPlayerClass( sender, new Cannon());
+        }
+    }
+    private PlayerTemplate createPlayerTemplateObject(Player sender, AbilityTemplate abilityClass){
+        PlayerTemplate playerTemplate = new PlayerTemplate();
+        abilityClass.setPlugin(this);
+        playerTemplate.updateClassDetails(sender , abilityClass);
+        return playerTemplate;
+    }
 
-
-    private void chooseClass(Player sender, AbilityTemplate playerClass) {
+    private void setPlayerClass(Player sender, AbilityTemplate abilityClass) {
     	try {
     		for(PlayerTemplate player_object : playerInstanceList) {
     			if(player_object.getPlayer() == sender.getUniqueId()){
@@ -50,60 +72,39 @@ public final class Main extends JavaPlugin {
     	catch (Exception e) {
 			System.out.println(e);
 		}
-    	PlayerTemplate playerTemplate = new PlayerTemplate();
-    	playerClass.setPlugin(this);
-    	playerTemplate.updateClassDetails(sender, playerClass);
+
+        PlayerTemplate playerTemplate = createPlayerTemplateObject(sender,abilityClass);
     	this.playerInstanceList.add(playerTemplate);
         sender.sendMessage("You have picked: " + playerTemplate.getAbility().getClassName());
     }
 
-
+    private boolean isStartCommand(CommandSender sender, String label){
+        return sender.isOp() && label.equalsIgnoreCase("start") && !hasStarted;
+    }
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if(sender.isOp() && label.equalsIgnoreCase("start")) {
+        if(isStartCommand(sender,label)) {
             initialGameTime = System.currentTimeMillis();
-            this.hasGameStarted = true;
+            this.hasStarted = true;
             this.getServer().broadcastMessage("Use Wooden sticks to activate ability, \ndependent on your class it may be left click, right click or PlayerHit");
         }
 
-        // Switch-Case to select Player's Class /ability [Class Name]
-            if(label.equalsIgnoreCase("ability") && args.length != 0 && sender instanceof Player && !hasGameStarted){
-                String className = args[0].toLowerCase();
-                switch (className) {
-                    case("miner"):
-                        chooseClass((Player) sender, new Miner());
-                    case ("medusa"):
-                        chooseClass((Player) sender, new Medusa());
-                    case ("warp"):
-                        chooseClass((Player) sender, new Warp());
-                    case ("ultradamage"):
-                        chooseClass((Player) sender, new UltraDamage());
-                    case ("ghost"):
-                        chooseClass((Player) sender, new Ghost());
-                    case ("gravity"):
-                        chooseClass((Player) sender, new Gravity());
-                    case ("cannon"):
-                        chooseClass((Player) sender, new Cannon());
-                }
-                return true;
+        else if(label.equalsIgnoreCase("ability") && args.length != 0 && sender instanceof Player && !hasStarted){
+            String abilityName = args[0].toLowerCase();
+            selectClass((Player) sender, abilityName);
+            return true;
+        }
+        else if(label.equalsIgnoreCase("team") && args.length != 0 && sender instanceof Player){
+            for(PlayerTemplate p : playerInstanceList) {
+                p.setTeamID(args[0]);
             }
-            else if(label.equalsIgnoreCase("team") && args.length == 0 && sender instanceof Player) {
-            	for(PlayerTemplate player_object : playerInstanceList) {
-            		if(this.getServer().getPlayer(player_object.getPlayer()) == sender) {
-            			this.getServer().getPlayer(player_object.getPlayer()).sendMessage(player_object.getTeamID());
-            			return true;
-            		}
-            	}
-            }
-            else if(label.equalsIgnoreCase("team") && args.length != 0 && sender instanceof Player){
-            	for(PlayerTemplate p : playerInstanceList) {
-            		p.setTeamID(args[0]);
-            	}
-                sender.sendMessage("You have chosen Team: " + args[0]);
-                return true;
-            }
+            sender.sendMessage("You have chosen Team: " + args[0]);
+            return true;
+        }
+        sender.sendMessage("Error on command sent | Command " + label);
         return false;
     }
+
 
     // Tab Completion for Class Selection
     @Override
