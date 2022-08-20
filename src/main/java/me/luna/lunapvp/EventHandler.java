@@ -21,6 +21,7 @@ import org.bukkit.event.player.PlayerTeleportEvent;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.UUID;
 
 public class EventHandler implements Listener {
     public boolean isPVPEnabled = false;
@@ -36,8 +37,8 @@ public class EventHandler implements Listener {
     }
     private void setPlayerDeath(Player p) {
     	for(PlayerTemplate playerObject : plugin.playerInstanceList) {
-    		if(server.getPlayer(playerObject.getPlayer()) == p) {
-    			playerObject.setPlayerDeathStatus(true);
+    		if(playerObject.getPlayer() == p) {
+    			playerObject.setPlayerDead(true);
     		}
     	}
     }
@@ -47,7 +48,7 @@ public class EventHandler implements Listener {
     }
     private boolean isPlayerDead(Player p) {
     	for(PlayerTemplate playerObject : plugin.playerInstanceList) {
-    		if(server.getPlayer(playerObject.getPlayer()) == p && playerObject.isPlayerDead()) {
+    		if(playerObject.getPlayer() == p && playerObject.isPlayerDead()) {
     			return true;
     		}
     	}
@@ -67,7 +68,7 @@ public class EventHandler implements Listener {
     }
 
     private boolean canPlayerBeHit(PlayerTemplate receiver){
-        return !receiver.isPlayerErased() && !receiver.getIsCompressed();
+        return !receiver.isPlayerErased() && !receiver.isPlayerCompressed();
     }
 
     private boolean isObjectPlayer(Object obj){

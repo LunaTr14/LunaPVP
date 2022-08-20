@@ -17,8 +17,8 @@ public class Eraser extends AbilityTemplate{
 
     @Override
     public void playerHitAbility(Player playerSpigotInstance) {
-        for(PlayerTemplate playerInstance : plugin.player_instance_list){
-            if(playerInstance.getPlayer() != playerSpigotInstance.getUniqueId() && !playerInstance.isPlayerErased()){
+        for(PlayerTemplate playerInstance : plugin.playerInstanceList){
+            if(playerInstance.() != playerSpigotInstance.getUniqueId() && !playerInstance.()){
                 playerInstance.setIsErase(true);
                 new BukkitRunnable() {
                     @Override

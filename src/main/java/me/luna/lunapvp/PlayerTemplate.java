@@ -13,47 +13,40 @@ import me.luna.playerClasses.AbilityTemplate;
 import org.bukkit.entity.Player;
 
 public class PlayerTemplate {
-	private volatile AbilityTemplate ability;
+	protected volatile AbilityTemplate abilityClass;
 	private boolean isPlayerDead = false;
-	private UUID playerUUID;
-	private String teamID;
-	private boolean isPlayerErased = false;
-	
-	protected PlayerTemplate() {
+	private Player player;
+	protected String teamID;
+	protected boolean isPlayerErased = false;
+
+
+	private void setTeamRandom(){
 		Random rand = new Random();
 		int randomInt = rand.nextInt(999) * rand.nextInt(999) *rand.nextInt(999);
 		this.teamID = Integer.toBinaryString(randomInt);
 	}
-	protected void setPlayerDeathStatus(boolean isPlayerDead) {
-		this.isPlayerDead = isPlayerDead;
+	protected PlayerTemplate(){setTeamRandom();}
+
+	protected void setAbility(AbilityTemplate ability){
+		this.abilityClass = ability;
 	}
-	protected void updateClassDetails(Player playerSpigotInstance, AbilityTemplate ability) {
-		this.ability = ability;
-		this.ability.setPlayer(playerSpigotInstance);
-		this.playerUUID = playerSpigotInstance.getUniqueId();
+
+	protected void setPlayer(Player p){
+		this.player = p;
 	}
-	protected boolean isPlayerDead() {
+	protected void setPlayerDead(boolean bool){
+		this.isPlayerDead = bool;
+	}
+	protected void setTeam(String teamID){
+		this.teamID = teamID;
+	}
+	protected Player getPlayer(){
+		return this.player;
+	}
+	protected boolean isPlayerErased(){
+		return this.isPlayerErased;
+	}
+	protected boolean isPlayerDead(){
 		return this.isPlayerDead;
-	}
-	protected String getTeamID() {
-		return this.teamID;
-	}
-	protected void setTeamID(String team) {
-		this.teamID = team;
-	}
-	public UUID getPlayer() {
-		return this.playerUUID;
-	}
-	public void setIsErase(boolean b){
-		this.isPlayerErased = b;
-	}
-	public boolean isPlayerErased(){
-		return this.isPlayerErased;
-	}
-	public boolean getIsCompressed(){
-		return this.isPlayerErased;
-	}
-	protected AbilityTemplate getAbility() {
-		return ability;
 	}
 }

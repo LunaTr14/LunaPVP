@@ -57,14 +57,15 @@ public final class Main extends JavaPlugin {
     private PlayerTemplate createPlayerTemplateObject(Player sender, AbilityTemplate abilityClass){
         PlayerTemplate playerTemplate = new PlayerTemplate();
         abilityClass.setPlugin(this);
-        playerTemplate.updateClassDetails(sender , abilityClass);
+        playerTemplate.playerUUID = sender.getUniqueId();
+        playerTemplate.setAbility();
         return playerTemplate;
     }
 
     private void setPlayerClass(Player sender, AbilityTemplate abilityClass) {
     	try {
     		for(PlayerTemplate player_object : playerInstanceList) {
-    			if(player_object.getPlayer() == sender.getUniqueId()){
+    			if(player_object.playerUUID == sender.getUniqueId()){
     				playerInstanceList.remove(player_object);
     			}
     		}
@@ -75,7 +76,7 @@ public final class Main extends JavaPlugin {
 
         PlayerTemplate playerTemplate = createPlayerTemplateObject(sender,abilityClass);
     	this.playerInstanceList.add(playerTemplate);
-        sender.sendMessage("You have picked: " + playerTemplate.getAbility().getClassName());
+        sender.sendMessage("You have picked: " + playerTemplate.ability.getClassName());
     }
 
     private boolean isStartCommand(CommandSender sender, String label){
