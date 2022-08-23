@@ -9,7 +9,7 @@ public class Gravity extends AbilityTemplate{
 		this.className = "Gravity";
 		this.classID = 5;
 	}
-    public void activatedAbility() {
+    public void passiveAbility() {
         if(!checkCooldown()){
             return;
         }

@@ -10,7 +10,7 @@ public class UltraDamage extends AbilityTemplate{
 		this.className = "UltraDamage";
 	}
     @Override
-    public void activatedAbility() {
+    public void passiveAbility() {
         if(!checkCooldown()){
             return;
         }
@@ -19,7 +19,7 @@ public class UltraDamage extends AbilityTemplate{
     }
 
     @Override
-    public void playerHitAbility(Player attackedPlayer) {
+    public void contactAbility(Player attackedPlayer) {
         attackedPlayer.setHealth(attackedPlayer.getHealth() - 4);
     }
 }

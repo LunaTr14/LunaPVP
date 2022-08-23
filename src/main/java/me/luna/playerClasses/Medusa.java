@@ -27,7 +27,7 @@ public class Medusa extends AbilityTemplate{
     }
 
     @Override
-    public void activatedAbility() {
+    public void passiveAbility() {
         if(!checkCooldown()){
             return;
         }

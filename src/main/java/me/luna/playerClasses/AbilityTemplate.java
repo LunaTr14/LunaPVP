@@ -13,8 +13,8 @@ public class AbilityTemplate {
     public void setPlugin(Main p) {
         this.plugin = p;
     }
-    public void activatedAbility(){}
-    public void playerHitAbility(Player attackedPlayer){}
+    public void passiveAbility(){}
+    public void contactAbility(Player attackedPlayer){}
     public void setPlayer(Player p) {
         this.player = p;
     }

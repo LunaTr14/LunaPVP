@@ -12,7 +12,7 @@ public class Miner extends AbilityTemplate{
 		this.classID = 3;
 	}
     @Override
-    public void activatedAbility() {
+    public void passiveAbility() {
         if(!checkCooldown()){
             return;
         }
@@ -32,7 +32,7 @@ public class Miner extends AbilityTemplate{
     }
 
     @Override
-    public void playerHitAbility(Player attackedPlayer) {
+    public void contactAbility(Player attackedPlayer) {
         if(!checkCooldown()){
             return;
         }

@@ -11,19 +11,14 @@ public class Eraser extends AbilityTemplate{
         this.className = "Eraser";
     }
     @Override
-    public void activatedAbility() {
-
-    }
-
-    @Override
-    public void playerHitAbility(Player playerSpigotInstance) {
+    public void contactAbility(Player playerSpigotInstance) {
         for(PlayerTemplate playerInstance : plugin.playerInstanceList){
-            if(playerInstance.() != playerSpigotInstance.getUniqueId() && !playerInstance.()){
-                playerInstance.setIsErase(true);
+            if(playerInstance.getPlayer() != playerSpigotInstance.getPlayer() && !playerInstance.isPlayerErased()){
+                playerInstance.setErased(true);
                 new BukkitRunnable() {
                     @Override
                     public void run() {
-                        playerInstance.setIsErase(false);
+                        playerInstance.setErased(false);
                     }
                 }.runTaskLater(plugin,60);
             }

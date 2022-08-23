@@ -9,7 +9,7 @@ public class Cannon extends AbilityTemplate{
 		this.className = "Cannon";
 	}
     @Override
-    public void playerHitAbility(Player attackedPlayer) {
+    public void contactAbility(Player attackedPlayer) {
         if(!checkCooldown()){
             return;
         }
@@ -19,7 +19,7 @@ public class Cannon extends AbilityTemplate{
     }
 
     @Override
-    public void activatedAbility() {
+    public void passiveAbility() {
         if(!checkCooldown()){
             return;
         }

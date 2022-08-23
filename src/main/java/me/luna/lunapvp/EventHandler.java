@@ -78,12 +78,12 @@ public class EventHandler implements Listener {
     public void onPlayerHit(EntityDamageByEntityEvent e){
         if(e.getEntity() instanceof Player && e.getDamager() instanceof Player && isPVPEnabled) {
             Player damager = (Player) e.getDamager();
-            Player reciever = (Player) e.getEntity();
-            if(!isPlayerHoldingStick(damager) || !isSamePlayer(damager, reciever))return;
+            Player receiver = (Player) e.getEntity();
+            if(!isPlayerHoldingStick(damager) || !isSamePlayer(damager, receiver))return;
 
             for(PlayerTemplate playerClass : plugin.playerInstanceList) {
-            	if(server.getPlayer(playerClass.getPlayer()) == e.getDamager() && canPlayerBeHit(playerClass)) {
-            		playerClass.getAbility().playerHitAbility(reciever);
+            	if(playerClass.getPlayer() == e.getDamager() && canPlayerBeHit(playerClass)) {
+            		playerClass.getPlayerAbility().contactAbility(receiver);
             		return;
             	}
             }
@@ -96,8 +96,8 @@ public class EventHandler implements Listener {
     public void onRightClick(PlayerInteractEvent e){
         if(isPlayerHoldingStick(e.getPlayer()) && isPlayerHoldingStick(e.getPlayer()) && isActionRightClick(e)) {
         	for(PlayerTemplate playerClass : plugin.playerInstanceList) {
-        		if(server.getPlayer(playerClass.getPlayer()) == e.getPlayer() && !playerClass.isPlayerErased() && !playerClass.getIsCompressed()) {
-        			playerClass.getAbility().activatedAbility();
+        		if(playerClass.getPlayer() == e.getPlayer() && !playerClass.isPlayerErased() && !playerClass.isPlayerCompressed()) {
+        			playerClass.getPlayerAbility().passiveAbility();
         			return;
         		}
         	}
@@ -115,7 +115,7 @@ public class EventHandler implements Listener {
     @org.bukkit.event.EventHandler
     public void onDeath(PlayerDeathEvent e){
         Player p = e.getEntity();
-        if(plugin.hasGameStarted) {
+        if(plugin.hasStarted) {
 	        setPlayerDeath(p);
 	        p.setGameMode(GameMode.SPECTATOR);
         }
