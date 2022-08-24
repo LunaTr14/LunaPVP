@@ -1,4 +1,4 @@
-package me.luna.playerClasses;
+package me.luna.abilities;
 
 import org.bukkit.Location;
 import org.bukkit.Material;

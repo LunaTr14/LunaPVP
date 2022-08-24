@@ -7,9 +7,8 @@ Purpose: playerObject class to handle Player Actions and Status
 package me.luna.lunapvp;
 
 import java.util.Random;
-import java.util.UUID;
 
-import me.luna.playerClasses.AbilityTemplate;
+import me.luna.abilities.AbilityTemplate;
 import org.bukkit.entity.Player;
 
 public class PlayerTemplate {

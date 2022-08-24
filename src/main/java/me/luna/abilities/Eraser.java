@@ -1,4 +1,4 @@
-package me.luna.playerClasses;
+package me.luna.abilities;
 
 import me.luna.lunapvp.PlayerTemplate;
 import me.luna.lunapvp.PlayerTemplate;

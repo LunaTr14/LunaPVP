@@ -1,4 +1,4 @@
-package me.luna.playerClasses;
+package me.luna.abilities;
 
 import me.luna.lunapvp.Main;
 import org.bukkit.entity.Player;

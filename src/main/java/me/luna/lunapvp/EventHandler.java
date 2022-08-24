@@ -125,4 +125,16 @@ public class EventHandler implements Listener {
     public void onPlayerJoin(PlayerJoinEvent e) {
     	e.getPlayer().sendMessage("Use /team to select team \nUse /ability to choose an ability");
     }
+
+
+    /*
+    Class Tests
+     */
+
+    private void testPlayerJoin(){
+        Player p = null;
+        PlayerJoinEvent e = new PlayerJoinEvent(p,"test");
+        onPlayerJoin(e);
+        e.getPlayer().chat
+    }
 }

@@ -7,7 +7,7 @@ Purpose: Main Function to start game
 
 package me.luna.lunapvp;
 
-import me.luna.playerClasses.*;
+import me.luna.abilities.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;

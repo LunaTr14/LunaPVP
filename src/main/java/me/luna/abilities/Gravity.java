@@ -1,4 +1,4 @@
-package me.luna.playerClasses;
+package me.luna.abilities;
 
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
