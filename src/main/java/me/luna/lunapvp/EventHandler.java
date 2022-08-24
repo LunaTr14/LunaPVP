@@ -8,6 +8,7 @@ package me.luna.lunapvp;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Server;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.Listener;
@@ -27,7 +28,6 @@ public class EventHandler implements Listener {
     public boolean isPVPEnabled = false;
     private Main plugin;
     private Server server;
-
     protected void setPlugin(Main plugin){
         this.plugin = plugin;
     }
@@ -62,47 +62,49 @@ public class EventHandler implements Listener {
         return e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK;
     }
 
-    // Is Attacker the same with Recipient
-    private boolean isSamePlayer(Player attacker, Player recipient) {
-        return attacker != recipient;
-    }
-
     private boolean canPlayerBeHit(PlayerTemplate receiver){
         return !receiver.isPlayerErased() && !receiver.isPlayerCompressed();
     }
 
-    private boolean isObjectPlayer(Object obj){
-        return obj instanceof Player;
+    private boolean isPlayerActive(Player p){
+        PlayerTemplate holderTemplate = findPlayerFromList(p);
+        return !holderTemplate.isPlayerDead() && !holderTemplate.isPlayerErased() && !holderTemplate.isPlayerCompressed();
     }
-    @org.bukkit.event.EventHandler
-    public void onPlayerHit(EntityDamageByEntityEvent e){
-        if(e.getEntity() instanceof Player && e.getDamager() instanceof Player && isPVPEnabled) {
-            Player damager = (Player) e.getDamager();
-            Player receiver = (Player) e.getEntity();
-            if(!isPlayerHoldingStick(damager) || !isSamePlayer(damager, receiver))return;
-
-            for(PlayerTemplate playerClass : plugin.playerInstanceList) {
-            	if(playerClass.getPlayer() == e.getDamager() && canPlayerBeHit(playerClass)) {
-            		playerClass.getPlayerAbility().contactAbility(receiver);
-            		return;
-            	}
-            }
+    //List is playerInstance List
+    private PlayerTemplate findPlayerFromList(Player p){
+        for(PlayerTemplate playerClass : plugin.playerInstanceList){
+            if(playerClass.getPlayer() == p) return playerClass;
         }
-        else if( isObjectPlayer(e.getEntity()) && isObjectPlayer(e.getDamager()) && !isPVPEnabled){
+        return null;
+    }
+    private void useContactAbility(Player hitter, Player receiver, EntityDamageByEntityEvent e){
+        PlayerTemplate receiverTemplate = findPlayerFromList(receiver);
+        PlayerTemplate hitterTemplate = findPlayerFromList(hitter);
+        if(hitter != receiver && isPVPEnabled && canPlayerBeHit(receiverTemplate)){
+            hitterTemplate.getPlayerAbility().contactAbility(receiver);
+        }
+        else{
             e.setCancelled(true);
         }
     }
+    private void useRightClickAbility(Player activator,PlayerInteractEvent e){
+        PlayerTemplate activatorTemplate = findPlayerFromList(activator);
+        // Shorten if Statement
+        if(isPlayerHoldingStick(activator) && isActionRightClick(e) && isPlayerActive(activator)){
+            activatorTemplate.getPlayerAbility().passiveAbility();
+        }
+    }
+    @org.bukkit.event.EventHandler
+    public void onPlayerHit(EntityDamageByEntityEvent e) throws Exception{
+        Player hitter = (Player) e.getDamager();
+        Player receiver = (Player) e.getEntity();
+        useContactAbility(hitter,receiver, e);
+        return;
+    }
     @org.bukkit.event.EventHandler
     public void onRightClick(PlayerInteractEvent e){
-        if(isPlayerHoldingStick(e.getPlayer()) && isPlayerHoldingStick(e.getPlayer()) && isActionRightClick(e)) {
-        	for(PlayerTemplate playerClass : plugin.playerInstanceList) {
-        		if(playerClass.getPlayer() == e.getPlayer() && !playerClass.isPlayerErased() && !playerClass.isPlayerCompressed()) {
-        			playerClass.getPlayerAbility().passiveAbility();
-        			return;
-        		}
-        	}
-        }
-        else return;
+        useRightClickAbility(e.getPlayer(),e);
+        return;
     }
 
     @org.bukkit.event.EventHandler
