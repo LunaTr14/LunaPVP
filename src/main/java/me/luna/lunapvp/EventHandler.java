@@ -28,26 +28,25 @@ public class EventHandler implements Listener {
     public boolean isPVPEnabled = false;
     private Main plugin;
     private Server server;
-    protected void setPlugin(Main plugin){
-        this.plugin = plugin;
-    }
-
-    protected void setServer(Server server){
-        this.server = server;
-    }
     private void setPlayerDeath(Player p) {
-    	for(PlayerTemplate playerObject : plugin.playerInstanceList) {
+    	for(PlayerTemplate playerObject : plugin.getPlayerTemplateList()) {
     		if(playerObject.getPlayer() == p) {
     			playerObject.setPlayerDead(true);
     		}
     	}
     }
 
-    protected void registerHandler(){
+    public EventHandler(Main plugin){
+        this.plugin = plugin;
+        this.server = plugin.getServer();
+        registerHandler();
+    }
+    private void registerHandler(){
         server.getPluginManager().registerEvents(this,plugin);
     }
+
     private boolean isPlayerDead(Player p) {
-    	for(PlayerTemplate playerObject : plugin.playerInstanceList) {
+    	for(PlayerTemplate playerObject : plugin.getPlayerTemplateList()) {
     		if(playerObject.getPlayer() == p && playerObject.isPlayerDead()) {
     			return true;
     		}
@@ -72,7 +71,7 @@ public class EventHandler implements Listener {
     }
     //List is playerInstance List
     private PlayerTemplate findPlayerFromList(Player p){
-        for(PlayerTemplate playerClass : plugin.playerInstanceList){
+        for(PlayerTemplate playerClass : plugin.getPlayerTemplateList()){
             if(playerClass.getPlayer() == p) return playerClass;
         }
         return null;
@@ -126,17 +125,5 @@ public class EventHandler implements Listener {
     @org.bukkit.event.EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
     	e.getPlayer().sendMessage("Use /team to select team \nUse /ability to choose an ability");
-    }
-
-
-    /*
-    Class Tests
-     */
-
-    private void testPlayerJoin(){
-        Player p = null;
-        PlayerJoinEvent e = new PlayerJoinEvent(p,"test");
-        onPlayerJoin(e);
-        e.getPlayer().chat
     }
 }

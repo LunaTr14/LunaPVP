@@ -16,25 +16,16 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.*;
 
 public final class Main extends JavaPlugin {
-    private volatile EventHandler eventHanlder;
+    private volatile EventHandler eventHandler;
     private volatile GameController gameController;
-    volatile public LinkedList<PlayerTemplate> playerInstanceList = new LinkedList<PlayerTemplate>();
+    volatile private LinkedList<PlayerTemplate> templateList = new LinkedList<PlayerTemplate>();
     private static String[] AUTO_FILL = {"Gravity","Ghost","Cannon","UltraDamage","Warp","Medusa","Miner"};
     protected boolean hasStarted = false;
     long initialGameTime = 0;
     public void onEnable() {
-        playerInstanceList = new LinkedList<>();
-
-        eventHanlder = new EventHandler();
-        eventHanlder.setPlugin(this);
-        eventHanlder.setServer(this.getServer());
-        eventHanlder.registerHandler();
-
-
-        gameController = new GameController();
-        gameController.setServer(this.getServer());
-        gameController.setWorld(this.getServer().getWorld("world"));
-        gameController.setPlugin(this);
+        templateList = new LinkedList<>();
+        eventHandler = new EventHandler(this);
+        gameController = new GameController(this,this.getServer().getWorld("world"));
     }
 
     private void startGame(){
@@ -68,20 +59,26 @@ public final class Main extends JavaPlugin {
         return playerTemplate;
     }
 
+    public PlayerTemplate findTemplateFromPlayer(Player p){
+        for(PlayerTemplate template : templateList){
+            if(template.getPlayer() == p) return template;
+        }
+        return null;
+    }
+
+    public void sendMessageToPlayer(Player p, String msg){
+
+    }
     private void setPlayerClass(Player sender, AbilityTemplate abilityClass) {
     	try {
-    		for(PlayerTemplate playerObject : playerInstanceList) {
-    			if(playerObject.getPlayer() == sender.getPlayer()){
-    				playerInstanceList.remove(playerObject);
-    			}
-    		}
+            templateList.remove(findTemplateFromPlayer(sender));
     	}
     	catch (Exception e) {
 			System.out.println(e);
 		}
 
         PlayerTemplate playerTemplate = createPlayerTemplateObject(sender,abilityClass);
-    	this.playerInstanceList.add(playerTemplate);
+    	this.templateList.add(playerTemplate);
         sender.sendMessage("You have picked: " + playerTemplate.getPlayerAbility().getClassName());
     }
 
@@ -98,9 +95,7 @@ public final class Main extends JavaPlugin {
         }
 
         else if(label.equalsIgnoreCase("team") && args.length != 0 && sender instanceof Player){
-            for(PlayerTemplate p : playerInstanceList) {
-                p.setTeam(args[0]);
-            }
+            findTemplateFromPlayer((Player) sender).setTeam(args[0]);
             sender.sendMessage("You have chosen Team: " + args[0]);
             return true;
         }
@@ -113,5 +108,9 @@ public final class Main extends JavaPlugin {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         return List.of(AUTO_FILL);
+    }
+
+    public LinkedList<PlayerTemplate> getPlayerTemplateList(){
+        return this.getPlayerTemplateList();
     }
 }
