@@ -29,7 +29,7 @@ public class EventHandler implements Listener {
     private Main plugin;
     private Server server;
     private void setPlayerDeath(Player p) {
-    	for(PlayerTemplate playerObject : plugin.getPlayerTemplateList()) {
+    	for(LunaPlayerClass playerObject : plugin.getLunaPlayerClassList()) {
     		if(playerObject.getPlayer() == p) {
     			playerObject.setPlayerDead(true);
     		}
@@ -46,7 +46,7 @@ public class EventHandler implements Listener {
     }
 
     private boolean isPlayerDead(Player p) {
-    	for(PlayerTemplate playerObject : plugin.getPlayerTemplateList()) {
+    	for(LunaPlayerClass playerObject : plugin.getLunaPlayerClassList()) {
     		if(playerObject.getPlayer() == p && playerObject.isPlayerDead()) {
     			return true;
     		}
@@ -61,24 +61,24 @@ public class EventHandler implements Listener {
         return e.getAction() == Action.RIGHT_CLICK_AIR || e.getAction() == Action.RIGHT_CLICK_BLOCK;
     }
 
-    private boolean canPlayerBeHit(PlayerTemplate receiver){
+    private boolean canPlayerBeHit(LunaPlayerClass receiver){
         return !receiver.isPlayerErased() && !receiver.isPlayerCompressed();
     }
 
     private boolean isPlayerActive(Player p){
-        PlayerTemplate holderTemplate = findPlayerFromList(p);
+        LunaPlayerClass holderTemplate = findPlayerFromList(p);
         return !holderTemplate.isPlayerDead() && !holderTemplate.isPlayerErased() && !holderTemplate.isPlayerCompressed();
     }
     //List is playerInstance List
-    private PlayerTemplate findPlayerFromList(Player p){
-        for(PlayerTemplate playerClass : plugin.getPlayerTemplateList()){
+    private LunaPlayerClass findPlayerFromList(Player p){
+        for(LunaPlayerClass playerClass : plugin.getLunaPlayerClassList()){
             if(playerClass.getPlayer() == p) return playerClass;
         }
         return null;
     }
     private void useContactAbility(Player hitter, Player receiver, EntityDamageByEntityEvent e){
-        PlayerTemplate receiverTemplate = findPlayerFromList(receiver);
-        PlayerTemplate hitterTemplate = findPlayerFromList(hitter);
+        LunaPlayerClass receiverTemplate = findPlayerFromList(receiver);
+        LunaPlayerClass hitterTemplate = findPlayerFromList(hitter);
         if(hitter != receiver && isPVPEnabled && canPlayerBeHit(receiverTemplate)){
             hitterTemplate.getPlayerAbility().contactAbility(receiver);
         }
@@ -87,7 +87,7 @@ public class EventHandler implements Listener {
         }
     }
     private void useRightClickAbility(Player activator,PlayerInteractEvent e){
-        PlayerTemplate activatorTemplate = findPlayerFromList(activator);
+        LunaPlayerClass activatorTemplate = findPlayerFromList(activator);
         // Shorten if Statement
         if(isPlayerHoldingStick(activator) && isActionRightClick(e) && isPlayerActive(activator)){
             activatorTemplate.getPlayerAbility().passiveAbility();

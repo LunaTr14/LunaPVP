@@ -8,11 +8,11 @@ package me.luna.lunapvp;
 
 import java.util.Random;
 
-import me.luna.abilities.AbilityTemplate;
+import me.luna.abilities.PvPClass;
 import org.bukkit.entity.Player;
 
-public class PlayerTemplate {
-	private volatile AbilityTemplate abilityClass;
+public class LunaPlayerClass {
+	private volatile PvPClass abilityClass;
 	private boolean isPlayerDead = false;
 	private Player player;
 	protected String teamID;
@@ -26,9 +26,9 @@ public class PlayerTemplate {
 		int randomInt = rand.nextInt(999) * rand.nextInt(999) *rand.nextInt(999);
 		this.teamID = Integer.toBinaryString(randomInt);
 	}
-	public PlayerTemplate(){setTeamRandom();}
+	public LunaPlayerClass(){setTeamRandom();}
 
-	public void setAbility(AbilityTemplate ability){
+	public void setAbility(PvPClass ability){
 		this.abilityClass = ability;
 	}
 
@@ -51,7 +51,7 @@ public class PlayerTemplate {
 		return this.isPlayerDead;
 	}
 
-	public AbilityTemplate getPlayerAbility(){
+	public PvPClass getPlayerAbility(){
 		return this.abilityClass;
 	}
 	public void setCompressed(boolean b){

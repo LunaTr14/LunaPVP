@@ -18,7 +18,7 @@ import java.util.*;
 public final class Main extends JavaPlugin {
     private volatile EventHandler eventHandler;
     private volatile GameController gameController;
-    volatile private LinkedList<PlayerTemplate> templateList = new LinkedList<PlayerTemplate>();
+    volatile private LinkedList<LunaPlayerClass> templateList = new LinkedList<LunaPlayerClass>();
     private static String[] AUTO_FILL = {"Gravity","Ghost","Cannon","UltraDamage","Warp","Medusa","Miner"};
     protected boolean hasStarted = false;
     long initialGameTime = 0;
@@ -51,16 +51,16 @@ public final class Main extends JavaPlugin {
                 setPlayerClass( sender, new Cannon());
         }
     }
-    private PlayerTemplate createPlayerTemplateObject(Player sender, AbilityTemplate abilityClass){
-        PlayerTemplate playerTemplate = new PlayerTemplate();
+    private LunaPlayerClass createLunaPlayerClassObject(Player sender, PvPClass abilityClass){
+        LunaPlayerClass LunaPlayerClass = new LunaPlayerClass();
         abilityClass.setPlugin(this);
-        playerTemplate.setPlayer(sender.getPlayer());
-        playerTemplate.setAbility(abilityClass);
-        return playerTemplate;
+        LunaPlayerClass.setPlayer(sender.getPlayer());
+        LunaPlayerClass.setAbility(abilityClass);
+        return LunaPlayerClass;
     }
 
-    public PlayerTemplate findTemplateFromPlayer(Player p){
-        for(PlayerTemplate template : templateList){
+    public LunaPlayerClass findTemplateFromPlayer(Player p){
+        for(LunaPlayerClass template : templateList){
             if(template.getPlayer() == p) return template;
         }
         return null;
@@ -69,7 +69,7 @@ public final class Main extends JavaPlugin {
     public void sendMessageToPlayer(Player p, String msg){
 
     }
-    private void setPlayerClass(Player sender, AbilityTemplate abilityClass) {
+    private void setPlayerClass(Player sender, PvPClass abilityClass) {
     	try {
             templateList.remove(findTemplateFromPlayer(sender));
     	}
@@ -77,9 +77,9 @@ public final class Main extends JavaPlugin {
 			System.out.println(e);
 		}
 
-        PlayerTemplate playerTemplate = createPlayerTemplateObject(sender,abilityClass);
-    	this.templateList.add(playerTemplate);
-        sender.sendMessage("You have picked: " + playerTemplate.getPlayerAbility().getClassName());
+        LunaPlayerClass LunaPlayerClass = createLunaPlayerClassObject(sender,abilityClass);
+    	this.templateList.add(LunaPlayerClass);
+        sender.sendMessage("You have picked: " + LunaPlayerClass.getPlayerAbility().getClassName());
     }
 
     private boolean isStartCommand(CommandSender sender, String label){
@@ -110,7 +110,7 @@ public final class Main extends JavaPlugin {
         return List.of(AUTO_FILL);
     }
 
-    public LinkedList<PlayerTemplate> getPlayerTemplateList(){
-        return this.getPlayerTemplateList();
+    public LinkedList<LunaPlayerClass> getLunaPlayerClassList(){
+        return this.getLunaPlayerClassList();
     }
 }
