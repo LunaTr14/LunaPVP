@@ -1,4 +1,4 @@
-package me.luna.abilities;
+package me.luna.custom.abilities;
 
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;

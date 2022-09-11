@@ -1,6 +1,5 @@
-package me.luna.abilities;
+package me.luna.custom.abilities;
 
-import me.luna.lunapvp.PlayerTemplate;
 import me.luna.lunapvp.PlayerTemplate;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;

@@ -1,6 +1,6 @@
-package me.luna.abilities;
+package me.luna.custom.abilities;
 
-import me.luna.lunapvp.Main;
+import me.luna.controller.Main;
 import org.bukkit.entity.Player;
 
 public class AbilityTemplate {
