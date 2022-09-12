@@ -1,10 +1,27 @@
 package me.luna.custom.abilities;
 
-import java.util.UUID;
+import org.bukkit.entity.Player;
 
-public interface PlayerTemplate {
-    String team = "";
-    Class ability = null;
-    UUID playerUUID = null;
+public class PlayerTemplate {
+    private String team;
+    private Player player;
+    private AbilityTemplate playerAbility;
 
+    public boolean isPlayerActive = false;
+
+    public void setPlayer(Player p ){
+        this.player = p;
+    }
+
+    public void setTeam(String team){
+        this.team = team;
+    }
+
+    public void setAbility(AbilityTemplate ability){
+        this.playerAbility = ability;
+    }
+
+    public AbilityTemplate getPlayerAbility(){
+        return this.playerAbility;
+    }
 }

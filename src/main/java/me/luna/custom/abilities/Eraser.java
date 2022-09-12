@@ -1,16 +1,11 @@
 package me.luna.custom.abilities;
 
-import me.luna.lunapvp.PlayerTemplate;
+import me.luna.custom.abilities.AbilityTemplate;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class Eraser extends AbilityTemplate{
-    public Eraser(){
-        this.classID = 111;
-        this.className = "Eraser";
-    }
-    @Override
-    public void contactAbility(Player playerSpigotInstance) {
+    public void usePlayerHit(Player p) {
         for(PlayerTemplate playerInstance : plugin.playerInstanceList){
             if(playerInstance.getPlayer() != playerSpigotInstance.getPlayer() && !playerInstance.isPlayerErased()){
                 playerInstance.setErased(true);

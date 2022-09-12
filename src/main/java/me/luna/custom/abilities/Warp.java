@@ -12,7 +12,7 @@ public class Warp extends AbilityTemplate{
 		this.className = "warp";
 	}
     @Override
-    public void contactAbility(Player attackedPlayer) {
+    public void usePlayerHit(Player attackedPlayer) {
         if(!checkCooldown()){
             return;
         }
@@ -21,7 +21,7 @@ public class Warp extends AbilityTemplate{
     }
 
     @Override
-    public void passiveAbility() {
+    public void usePassive() {
         if(!checkCooldown()){
             return;
         }

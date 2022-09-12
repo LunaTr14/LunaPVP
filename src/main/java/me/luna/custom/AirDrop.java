@@ -35,8 +35,8 @@ public class AirDrop {
     // Generates a random set of items
     private ItemStack createItemStack(){
         Random rand = new Random();
-        ItemStack item_stack = new ItemStack(AIRDROP_ITEMS[rand.nextInt(AIRDROP_ITEMS.length - 1)], rand.nextInt(3));
-        return item_stack;
+        ItemStack itemStack = new ItemStack(AIRDROP_ITEMS[rand.nextInt(AIRDROP_ITEMS.length - 1)], rand.nextInt(3));
+        return itemStack;
     }
 
     private long getHighestBlock(int xCoordinate, int zCoordinate){
@@ -50,13 +50,13 @@ public class AirDrop {
         return this.worldInstance;
     }
     public void spawnAirdrop(Server s){
-        Location chest_location = getRandomLocation();
-        chest_location.getBlock().setType(Material.CHEST);
-        Chest block = (Chest) chest_location.getBlock().getState();
+        Location chestLocation = getRandomLocation();
+        chestLocation.getBlock().setType(Material.CHEST);
+        Chest block = (Chest) chestLocation.getBlock().getState();
         for(int i = 0; i < 5; i++) {
             block.getBlockInventory().addItem(createItemStack());
         }
-        s.broadcastMessage("Airdrop has been droppped at: " + chest_location.getBlockX() + ", " + chest_location.getBlockZ());
+        s.broadcastMessage("Airdrop has been droppped at: " + chestLocation.getBlockX() + ", " + chestLocation.getBlockZ());
     }
 
 

@@ -7,9 +7,9 @@ public class Cannon extends AbilityTemplate{
 	public Cannon() {
 		this.classID = 7;
 		this.className = "Cannon";
+
 	}
-    @Override
-    public void contactAbility(Player attackedPlayer) {
+    public void usePlayerHit(Player attackedPlayer) {
         if(!checkCooldown()){
             return;
         }
@@ -18,8 +18,7 @@ public class Cannon extends AbilityTemplate{
         cooldownTime = System.currentTimeMillis();
     }
 
-    @Override
-    public void passiveAbility() {
+    public void usePassive() {
         if(!checkCooldown()){
             return;
         }

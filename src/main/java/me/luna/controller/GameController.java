@@ -21,7 +21,7 @@ public class GameController {
 
     public GameController(Main plugin, World w){
         this.plugin = plugin;
-        this.server =plugin.getServer();
+        this.server = plugin.getServer();
         this.world = w;
         this.worldBorder = w.getWorldBorder();
     }

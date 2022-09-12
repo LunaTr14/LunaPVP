@@ -20,7 +20,7 @@ public class Ghost extends AbilityTemplate{
         player.removePotionEffect(PotionEffectType.BLINDNESS);
         player.removePotionEffect(PotionEffectType.SLOW);
     }
-    public void passiveAbility() {
+    public void usePassive() {
         if(!checkCooldown()){
             return;
         }
@@ -40,7 +40,7 @@ public class Ghost extends AbilityTemplate{
 
     }
 
-    public void contactAbility(Player attackedPlayer) {
+    public void usePlayerHit(Player attackedPlayer) {
         if(!checkCooldown()){
             return;
         }

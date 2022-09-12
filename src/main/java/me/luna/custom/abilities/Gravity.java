@@ -9,7 +9,7 @@ public class Gravity extends AbilityTemplate{
 		this.className = "Gravity";
 		this.classID = 5;
 	}
-    public void passiveAbility() {
+    public void usePassive() {
         if(!checkCooldown()){
             return;
         }
@@ -19,7 +19,7 @@ public class Gravity extends AbilityTemplate{
         cooldownTime = System.currentTimeMillis();
     }
 
-    public void playerHitAbility(Player attackedPlayer) {
+    public void usePlayerHit(Player attackedPlayer) {
         if(!checkCooldown()){
             return;
         }

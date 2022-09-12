@@ -11,8 +11,8 @@ public class Miner extends AbilityTemplate{
 		this.className = "Miner";
 		this.classID = 3;
 	}
-    @Override
-    public void passiveAbility() {
+
+    public void usePassive() {
         if(!checkCooldown()){
             return;
         }
@@ -31,8 +31,7 @@ public class Miner extends AbilityTemplate{
         cooldownTime = System.currentTimeMillis();
     }
 
-    @Override
-    public void contactAbility(Player attackedPlayer) {
+    public void usePlayerHit(Player attackedPlayer) {
         if(!checkCooldown()){
             return;
         }
