@@ -1,4 +1,4 @@
-package me.luna.playerClasses;
+package me.luna.custom.abilities;
 
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -10,7 +10,7 @@ public class UltraDamage extends AbilityTemplate{
 		this.className = "UltraDamage";
 	}
     @Override
-    public void activatedAbility() {
+    public void usePassive() {
         if(!checkCooldown()){
             return;
         }
@@ -19,7 +19,7 @@ public class UltraDamage extends AbilityTemplate{
     }
 
     @Override
-    public void playerHitAbility(Player attackedPlayer) {
+    public void usePlayerHit(Player attackedPlayer) {
         attackedPlayer.setHealth(attackedPlayer.getHealth() - 4);
     }
 }

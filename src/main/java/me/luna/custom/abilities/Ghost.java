@@ -1,4 +1,4 @@
-package me.luna.playerClasses;
+package me.luna.custom.abilities;
 
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
@@ -20,7 +20,7 @@ public class Ghost extends AbilityTemplate{
         player.removePotionEffect(PotionEffectType.BLINDNESS);
         player.removePotionEffect(PotionEffectType.SLOW);
     }
-    public void activatedAbility() {
+    public void usePassive() {
         if(!checkCooldown()){
             return;
         }
@@ -40,7 +40,7 @@ public class Ghost extends AbilityTemplate{
 
     }
 
-    public void playerHitAbility(Player attackedPlayer) {
+    public void usePlayerHit(Player attackedPlayer) {
         if(!checkCooldown()){
             return;
         }

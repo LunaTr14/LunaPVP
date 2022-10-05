@@ -1,6 +1,7 @@
-package me.luna.playerClasses;
+package me.luna.custom.abilities;
 
-import me.luna.lunapvp.Main;
+import me.luna.controller.Main;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 
 public class AbilityTemplate {
@@ -13,13 +14,9 @@ public class AbilityTemplate {
     public void setPlugin(Main p) {
         this.plugin = p;
     }
-    public void activatedAbility(){
-
-    }
-
-    public void playerHitAbility(Player attackedPlayer){
-
-    }
+    public void usePassive(){}
+    public void usePlayerHit(Player attackedPlayer){}
+    public void userBlockHit (Block b){}
     public void setPlayer(Player p) {
         this.player = p;
     }
@@ -30,7 +27,6 @@ public class AbilityTemplate {
         return this.player;
     }
     protected boolean checkCooldown(){
-
         System.out.println(System.currentTimeMillis() - cooldownTime);
         return System.currentTimeMillis() - cooldownTime > 10000;
     }

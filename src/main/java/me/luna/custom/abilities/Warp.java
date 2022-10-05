@@ -1,4 +1,4 @@
-package me.luna.playerClasses;
+package me.luna.custom.abilities;
 
 import org.bukkit.entity.Player;
 
@@ -12,7 +12,7 @@ public class Warp extends AbilityTemplate{
 		this.className = "warp";
 	}
     @Override
-    public void playerHitAbility(Player attackedPlayer) {
+    public void usePlayerHit(Player attackedPlayer) {
         if(!checkCooldown()){
             return;
         }
@@ -21,7 +21,7 @@ public class Warp extends AbilityTemplate{
     }
 
     @Override
-    public void activatedAbility() {
+    public void usePassive() {
         if(!checkCooldown()){
             return;
         }

@@ -1,4 +1,4 @@
-package me.luna.playerClasses;
+package me.luna.custom.abilities;
 
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
@@ -9,7 +9,7 @@ public class Gravity extends AbilityTemplate{
 		this.className = "Gravity";
 		this.classID = 5;
 	}
-    public void activatedAbility() {
+    public void usePassive() {
         if(!checkCooldown()){
             return;
         }
@@ -19,7 +19,7 @@ public class Gravity extends AbilityTemplate{
         cooldownTime = System.currentTimeMillis();
     }
 
-    public void playerHitAbility(Player attackedPlayer) {
+    public void usePlayerHit(Player attackedPlayer) {
         if(!checkCooldown()){
             return;
         }

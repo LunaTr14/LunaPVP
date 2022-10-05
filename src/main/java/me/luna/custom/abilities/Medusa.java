@@ -1,4 +1,4 @@
-package me.luna.playerClasses;
+package me.luna.custom.abilities;
 
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -11,7 +11,7 @@ public class Medusa extends AbilityTemplate{
 		this.classID = 4;
 		this.className = "Medusa";
 	}
-    public void playerHitAbility(Player attackedPlayer) {
+    public void usePlayerHit(Player attackedPlayer) {
         if(!checkCooldown()){
             return;
         }
@@ -26,8 +26,7 @@ public class Medusa extends AbilityTemplate{
         cooldownTime = System.currentTimeMillis();
     }
 
-    @Override
-    public void activatedAbility() {
+    public void usePassive() {
         if(!checkCooldown()){
             return;
         }
