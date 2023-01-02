@@ -4,7 +4,7 @@ Edited Last: 25/4/2022
 Purpose: Controls the Start, PvP and timing of game
 */
 
-package me.luna.lunapvp;
+package me.luna.controller;
 
 import org.bukkit.Location;
 import org.bukkit.Server;
@@ -12,72 +12,57 @@ import org.bukkit.World;
 import org.bukkit.WorldBorder;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.LinkedList;
+
 public class GameController {
-	private Main plugin;
-	private World world;
-    private Server server;
 
-    private WorldBorder worldBorder;
+    private World world;
+    long gameStartTime = 0;
+    public boolean isGracePeriodActive = true;
 
-    public GameController(Main plugin, World w){
-        this.plugin = plugin;
-        this.server = plugin.getServer();
-        this.world = w;
-        this.worldBorder = w.getWorldBorder();
-    }
+    public float gracePeriodSeconds = 300;
 
-    private AirDrop createAirDrop(){
-        AirDrop airDrop = new AirDrop();
-        airDrop.setWorld(world);
-        airDrop.spawnAirdrop(server);
-        return airDrop;
-    }
+    private Main plugin;
 
     public void startGame(){
-        initialiseWorld();
-        teleportPlayers();
-        resetPlayers();
+        gameStartTime = System.currentTimeMillis();
+        teleportAllPlayers(0,world.getHighestBlockYAt(0,0),0);
+        startGracePeriodTimer();
+    }
+
+
+    private void startGracePeriodTimer(){
         new BukkitRunnable() {
             @Override
             public void run() {
-                double newWorldBorder = generateWorldBorderSize();
-                server.broadcastMessage("Previous World Border Size: " + world.getWorldBorder().getSize());
-                server.broadcastMessage("New World Border Size" + newWorldBorder);
-                worldBorder.setSize(newWorldBorder,60);
-                createAirDrop();
+                long timeElapsed = gameStartTime - System.currentTimeMillis();
+                if(timeElapsed >= gracePeriodSeconds){
+                    isGracePeriodActive = false;
+                    plugin.getServer().broadcastMessage("Grace Period is off");
+                    cancel();
+                }
+                else if(timeElapsed >= (gracePeriodSeconds / 2)){
+                    plugin.getServer().broadcastMessage("Half of Grace period");
+                }
             }
-        }.runTaskTimer(plugin,20,8400);
+        }.runTaskTimer(plugin,0,10);
     }
-
-    private void initialiseWorld() {
-        worldBorder.setCenter(0,0);
-        worldBorder.setSize(2500);
-        worldBorder.setWarningDistance(50);
-        worldBorder.setWarningTime(20);
+    public GameController(Main p, World w){
+        plugin = p;
+        this.world = w;
     }
-
-    private void teleportPlayers(){
-        for(Player player : server.getOnlinePlayers()){
-            int highestBlock = server.getWorld("world").getHighestBlockYAt(0,0);
-            player.teleport(new Location(player.getWorld(), 0,highestBlock + 1,0));
+    private void teleportAllPlayers(double x, double y, double z){
+        for(Player p : plugin.getServer().getOnlinePlayers()){
+            p.teleport(new Location(p.getWorld(),x,y,z));
         }
     }
 
-
-    // Resets Player Health, Inventory and Food Level
-    private void resetPlayers(){
-        for(Player p : server.getOnlinePlayers()){
-            p.getInventory().clear();
+    //Resets Hunger and Health of all online Players
+    private void resetPlayerStatus(){
+        for(Player p : plugin.getServer().getOnlinePlayers()){
             p.setHealth(20);
-            p.setFoodLevel(25);
+            p.setFoodLevel(20);
         }
-    }
-
-    private double generateWorldBorderSize(){
-        double previousBorderSize = world.getWorldBorder().getSize();
-        if(previousBorderSize> 1500){
-            return previousBorderSize / 2;
-        }
-        return previousBorderSize - 500;
     }
 }
