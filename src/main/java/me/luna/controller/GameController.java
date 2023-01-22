@@ -17,6 +17,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 public class GameController {
     private static int GAME_TICKS = 20;
     private World world;
+    private Server server;
     long gameStartTime = 0;
     public boolean isGracePeriodActive = true;
 
@@ -31,14 +32,28 @@ public class GameController {
         plugin = p;
         this.world = w;
         this.border = w.getWorldBorder();
+        this.server = p.getServer();
     }
 
     public void startGame(){
         gameStartTime = System.currentTimeMillis();
-        teleportAllPlayers(0,world.getHighestBlockYAt(0,0),0);
+        teleportAllPlayers(0,world.getHighestBlockYAt(0,0)+1,0);
         border.setCenter(0,0);
+        resetPlayerStatus();
         startGracePeriodTimer();
         runWorldBorderTimer();
+    }
+    private void teleportAllPlayers(double x, double y, double z){
+        for(Player p : server.getOnlinePlayers()){
+            p.teleport(new Location(p.getWorld(),x,y,z));
+        }
+    }
+    //Resets Hunger and Health of all online Players
+    private void resetPlayerStatus(){
+        for(Player p : server.getOnlinePlayers()){
+            p.setHealth(20);
+            p.setFoodLevel(20);
+        }
     }
     private void startGracePeriodTimer(){
         new BukkitRunnable() {
@@ -67,9 +82,6 @@ public class GameController {
             }
         }.runTaskTimer(plugin,0,GAME_TICKS * 10);
     }
-    private void teleportAllPlayers(double x, double y, double z){
-        for(Player p : plugin.getServer().getOnlinePlayers()){
-            p.teleport(new Location(p.getWorld(),x,y,z));
 
     // shrinkWorldBorder used for the worldborder timer and shrinking based on previous size
     private void shrinkWorldBorder (){
@@ -89,12 +101,6 @@ public class GameController {
         }
     }
 
-    //Resets Hunger and Health of all online Players
-    private void resetPlayerStatus(){
-        for(Player p : plugin.getServer().getOnlinePlayers()){
-            p.setHealth(20);
-            p.setFoodLevel(20);
-        }
     //setWorldBorder used for manually setting the size of the Border
     private void setWorldBorder(double size){
         world.getWorldBorder().setSize(size,borderShrinkSeconds / 2);
