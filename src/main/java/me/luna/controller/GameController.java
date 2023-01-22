@@ -62,14 +62,14 @@ public class GameController {
                 long timeElapsed = gameStartTime - System.currentTimeMillis();
                 if(timeElapsed >= gracePeriodSeconds){
                     isGracePeriodActive = false;
-                    plugin.getServer().broadcastMessage("Grace Period is off");
+                    server.broadcastMessage("Grace Period is off");
                     cancel();
                 }
                 else if(timeElapsed >= (gracePeriodSeconds / 2)){
-                    plugin.getServer().broadcastMessage("Half of Grace period");
+                    server.broadcastMessage("Half of Grace period, Time remaining: "+(gracePeriodSeconds/2));
                 }
             }
-        }.runTaskTimer(plugin,0,10);
+        }.runTaskTimer(plugin,0,(GAME_TICKS * 5)); // Loops every 5 Seconds
     }
     private void runWorldBorderTimer(){
         new BukkitRunnable(){
