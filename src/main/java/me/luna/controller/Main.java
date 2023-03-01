@@ -16,12 +16,14 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.*;
 
 public final class Main extends JavaPlugin {
-    private static HashMap<String,Class> abilityMap = new HashMap<String, Class>();
-    private HashMap<Player, Class> playerAbilityMap = new HashMap<>();
+    private static final HashMap<String,Class> abilityMap = new HashMap<String, Class>();
+    private final HashMap<Player, Class> playerAbilityMap = new HashMap<>();
     long startTime = 0;
-    private GameController gameController = new GameController();
-    private EventHandler eventHandler = new EventHandler();
+    private final GameController gameController = new GameController();
+    private final EventHandler eventHandler = new EventHandler();
 
+    private void appendAbility(String abilityName, Class abilityClass){
+        abilityMap.put(abilityName,abilityClass);
     }
 
     public long getNow(){
@@ -45,11 +47,13 @@ public final class Main extends JavaPlugin {
             return true;
         }
         if(sender.isOp() && label.equalsIgnoreCase("game")){
-            gameController.startGame();
-            broadcastToOperators("GameController activated");
-            eventHandler.registerHandler(this);
-            broadcastToOperators("EventHandler Registered");
-            startTime = getNow();
+            if(args[0].equalsIgnoreCase("start")) {
+                gameController.startGame();
+                broadcastToOperators("GameController activated");
+                eventHandler.registerHandler(this);
+                broadcastToOperators("EventHandler Registered");
+                startTime = getNow();
+            }
         }
         }
         else if(label.equalsIgnoreCase("class") && sender instanceof Player){
