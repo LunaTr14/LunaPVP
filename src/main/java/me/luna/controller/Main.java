@@ -7,7 +7,7 @@ Purpose: Main Function to start game
 
 package me.luna.controller;
 
-import me.luna.custom.abilities.*;
+import me.luna.custom.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -16,51 +16,51 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.util.*;
 
 public final class Main extends JavaPlugin {
-    static HashMap<String, Class> abilitiesHashmap;
-    volatile HashMap<Player, Class> playerAbilityHashMap;
-    HashMap<Player,String> playerTeamHashMap;
-    private static LinkedList<String> abilityLinkedList;
-    boolean hasGameStarted = false;
-    private EventHandler eventHandler;
-    private GameController gameController;
-    private static void initAbilityMap(){
-        abilitiesHashmap.put("gravity", Gravity.class);
-        abilitiesHashmap.put("cannon", Cannon.class);
-        abilitiesHashmap.put("ultradamage", UltraDamage.class);
+    private static HashMap<String,Class> abilityMap = new HashMap<String, Class>();
+    private HashMap<Player, Class> playerAbilityMap = new HashMap<>();
+    long startTime = 0;
+    private GameController gameController = new GameController();
+    private EventHandler eventHandler = new EventHandler();
+
     }
 
-    private static void initAbilityList(){
-        abilityLinkedList.add("gravity");
-        abilityLinkedList.add("cannon");
-        abilityLinkedList.add("ultradamage");
+    public long getNow(){
+        return System.currentTimeMillis();
     }
-
-    private void startGame(){
-        this.hasGameStarted = true;
-        this.eventHandler.enableEventHandler();
+    public Player[] getOnlinePlayers(){
+        return (Player[]) this.getServer().getOnlinePlayers().toArray();
     }
     @Override
     public void onEnable() {
-        initAbilityMap();
-        initAbilityList();
-        eventHandler = new EventHandler(this);
-        //TODO Edit getWorld to plugin config
-        gameController = new GameController(this,this.getServer().getWorld("world"));
+        appendAbility("GRAVITY", Gravity.class);
+        appendAbility("CANNON", Cannon.class);
+        appendAbility("STRENGTH", Strength.class);
+        gameController.setPlugin(this);
     }
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if(hasGameStarted){
+        if(startTime > 0){
+
             sender.sendMessage("Command is invalid, Game has already Started");
             return true;
         }
         if(sender.isOp() && label.equalsIgnoreCase("game")){
-            if(args[0].equalsIgnoreCase("start"))startGame();
+            gameController.startGame();
+            broadcastToOperators("GameController activated");
+            eventHandler.registerHandler(this);
+            broadcastToOperators("EventHandler Registered");
+            startTime = getNow();
+        }
         }
         else if(label.equalsIgnoreCase("class") && sender instanceof Player){
             if(abilitiesHashmap.containsKey(args[0].toLowerCase())){
                 Class abilityClass = abilitiesHashmap.get(args[0].toLowerCase());
                 this.playerAbilityHashMap.put(((Player) sender).getPlayer(),abilityClass);
 
+    private void broadcastToOperators(String message){
+        for(Player p : this.getOnlinePlayers()){
+            if(p.isOp()){
+                p.sendMessage(message);
             }
         }
         else if(label.equalsIgnoreCase("team") && sender instanceof Player){
