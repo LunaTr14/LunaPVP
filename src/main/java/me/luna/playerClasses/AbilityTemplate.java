@@ -2,40 +2,20 @@ package me.luna.playerClasses;
 
 import org.bukkit.entity.Player;
 
-import me.luna.lunapvp.main;
-
 public class AbilityTemplate {
-    long cooldownTime = 0;
-    protected Player player;
-    String className = "";
-    main plugin;
-    int classID = 0;
+    public Player player;
 
-    public void setPlugin(main p) {
-    	this.plugin = p;
+    public AbilityTemplate(Player p){
+        this.player = p;
     }
-    public void activatedAbility(){
-
+    public void rightClickAbility(){
     }
 
-    public void playerHitAbility(Player attackedPlayer){
+    public void playerHitAbility(Player defender){
 
     }
-    public void setPlayer(Player p) {
-    	this.player = p;
-    }
-    public String getClassName() {
-    	return this.className;
-    }
-    public Player getPlayer(){
-    	return this.player;
-    }
-    protected boolean checkCooldown(){
 
-        System.out.println(System.currentTimeMillis() - cooldownTime);
-        if(System.currentTimeMillis() - cooldownTime > 10000){
-            return true;
-        }
-        return false;
+    public AbilityTemplate newInstance(){
+        return new AbilityTemplate(player);
     }
 }
