@@ -4,8 +4,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-public class UltraDamage extends AbilityTemplate{
-	public UltraDamage() {
+public class Damage extends AbilityTemplate{
+	public Damage() {
 		this.classID = 2;
 		this.className = "UltraDamage";
 	}
