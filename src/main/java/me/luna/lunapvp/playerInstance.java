@@ -7,39 +7,36 @@ import org.bukkit.entity.Player;
 
 import me.luna.playerClasses.AbilityTemplate;
 
-public class playerInstance {
+public class PlayerInstance {
 	private AbilityTemplate ability;
-	private boolean playerDead = false;
+	public boolean isPlayerDead = false;
+	private long lastActivation = 0;
 	private UUID playerUUID;
-	private String teamID = "";
-	
-	protected playerInstance() {
-		Random rand = new Random();
-		int randomInt = rand.nextInt(999) * rand.nextInt(999) *rand.nextInt(999);
-		this.teamID = Integer.toBinaryString(randomInt);
+
+	public PlayerInstance(UUID playerUUID){
+		this.playerUUID = playerUUID;
 	}
-	protected void setPlayerDeathStatus(boolean isPlayerDead) {
-		this.playerDead = isPlayerDead;
+
+	public boolean hasCooldownPassed(){
+		return lastActivation - System.currentTimeMillis() > Main.ABILITY_COOLDOWN_SECONDS;
 	}
-	protected void updateClassDetails(Player p, AbilityTemplate ability) {
-		this.ability = ability;
-		this.ability.setPlayer(p);
-		this.playerUUID = p.getUniqueId();
-	}
-	protected boolean isPlayerDead() {
-		return this.playerDead;
-	}
-	protected String getTeamID() {
-		return this.teamID;
-	}
-	protected void setTeamID(String team) {
-		this.teamID = team;
-	}
-	protected UUID getPlayer() {
+	protected UUID getPlayerUUID() {
 		return this.playerUUID;
 	}
-	
-	protected AbilityTemplate getAbility() {
-		return ability;
+
+	public void setAbility(AbilityTemplate abilityClass){
+		this.ability = abilityClass.newInstance();
+	}
+
+	public void playerHitAbility(Player defender){
+		if(!hasCooldownPassed())return;
+		ability.playerHitAbility(defender);
+		lastActivation = System.currentTimeMillis();
+	}
+
+	public void rightClickAbility(){
+		if(!hasCooldownPassed())return;
+		ability.rightClickAbility();
+		lastActivation = System.currentTimeMillis();
 	}
 }
