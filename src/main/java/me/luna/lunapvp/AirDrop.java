@@ -1,47 +1,53 @@
 package me.luna.lunapvp;
 
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Server;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Chest;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.LinkedList;
 import java.util.Random;
 
 public class AirDrop {
-    LinkedList<Material> airDropItemList = new LinkedList<>();
-    World w;
+    private World world;
 
-    public AirDrop(){
-        airDropItemList.add(Material.GOLDEN_APPLE);
-        airDropItemList.add(Material.DIAMOND);
-        airDropItemList.add(Material.IRON_ORE);
-        airDropItemList.add(Material.GOLDEN_CARROT);
-        airDropItemList.add(Material.SHIELD);
-        airDropItemList.add(Material.ENDER_PEARL);
-        airDropItemList.add(Material.BREWING_STAND);
-        airDropItemList.add(Material.BLAZE_POWDER);
-        airDropItemList.add(Material.NETHER_WART);
+    public AirDrop(World world){
+        this.world = world;
     }
-    private int generateLimitedInt(int limit){
-        Random rand = new Random();
-        return (rand.nextInt(limit * 2) - limit);
+    Material AIRDROP_ITEMS[] = {Material.GOLDEN_APPLE,Material.DIAMOND,
+            Material.IRON_ORE,Material.GOLDEN_CARROT,
+            Material.SHIELD, Material.ENDER_PEARL,
+            Material.BREWING_STAND, Material.BLAZE_POWDER,
+            Material.NETHER_WART
+    };
+    private Location getBorderCenter(){
+        return world.getWorldBorder().getCenter();
     }
+
+    private double getBorderRadius() {
+        return world.getWorldBorder().getSize() / 2;
+    }
+    private int getMaxXAxis(){
+        return (int) (getBorderRadius() + getBorderCenter().getX());
+    }
+
+    private int getMaxZAxis(){
+        return (int) getBorderRadius() + getBorderCenter().getZ());
+    }
+
     private Location getRandomLocation(){
         Random rand = new Random();
-        int xCoordinate = generateLimitedInt(500);
-        int zCoordinate = generateLimitedInt(500);
-        Location loc = new Location(w, xCoordinate, w.getHighestBlockYAt(xCoordinate,zCoordinate) + 1, zCoordinate);
+        double x = rand.nextInt(getMaxXAxis()) - getBorderRadius();
+        double z = rand.nextInt(getMaxZAxis()) -getBorderRadius();
+        Location loc = new Location(world,x, world.getHighestBlockYAt((int) x,(int)z)+ 1, z);
         return loc;
     }
 
     private ItemStack generateRandomItem(){
         Random rand = new Random();
-        ItemStack itemStack = new ItemStack(airDropItemList.get(rand.nextInt(airDropItemList.size() - 1)),rand.nextInt(3));
-        return itemStack;
+        int i = rand.nextInt(AIRDROP_ITEMS.length);
+        int amount = rand.nextInt(5);
+        return new ItemStack(AIRDROP_ITEMS[i],amount);
     }
+
     public void spawnAirDrop(Server s){
         Location chestLocation = getRandomLocation();
         chestLocation.getBlock().setType(Material.CHEST);
@@ -51,6 +57,4 @@ public class AirDrop {
         }
         s.broadcastMessage("Airdrop has been droppped at: " + Integer.toString(chestLocation.getBlockX()) + ", " + Integer.toString(chestLocation.getBlockZ()));
     }
-
-
 }
