@@ -2,10 +2,11 @@ package me.luna.lunapvp;
 
 
 import org.bukkit.World;
+import org.bukkit.scheduler.BukkitRunnable;
 
 public class WorldHandler {
-    private static int SHRINK_PERIOD = 90;
-    private static int SHRINK_DELAY_SEC = 240;
+    private static final int SHRINK_PERIOD = 90;
+    private static final int SHRINK_DELAY_SEC = 240;
 
     private World world;
     public void spawnAirDrop(){
@@ -33,7 +34,7 @@ public class WorldHandler {
         }
         return borderLength / 2;
     }
-    public void shrinkBorder(){
+    private void shrinkBorder(){
         if(getBorderSize() <= 50) return;
         world.getWorldBorder().setSize(getNewBorderRadius(),SHRINK_PERIOD);
     }
@@ -43,6 +44,14 @@ public class WorldHandler {
         setBorderSize(10000);
     }
 
+    public void startShrinkBorder(Main plugin){
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                shrinkBorder();
+            }
+        }.runTaskTimer(plugin,SHRINK_DELAY_SEC,SHRINK_DELAY_SEC);
+    }
     public void setWorld(World world){
         this.world = world;
     }

@@ -5,24 +5,29 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
+
 import java.util.*;
 
 public final class Main extends JavaPlugin {
     private LunaEventHandler eventHandler;
-    private GameHandler gameHandler;
+    private WorldHandler worldHandler;
     public volatile LinkedList<PlayerInstance> playerList = new LinkedList<PlayerInstance>();
     public static HashMap<String, AbilityTemplate> abilities = new HashMap<>();
-    protected boolean hasGameStarted = false;
+    public static String WORLD_NAME = "world";
+    private boolean hasGameStarted = false;
 
     private static void initAbilities(){
         abilities.put("miner", new Miner());
         abilities.put("gravity", new Gravity());
         abilities.put("damage", new Damage());
     }
+    @Override
     public void onEnable() {
         initAbilities();
         eventHandler = new LunaEventHandler(this);
-        gameHandler = new GameHandler(this);
+        worldHandler = new WorldHandler();
+        worldHandler.setWorld(this.getServer().getWorld(WORLD_NAME));
+        worldHandler.initWorldBorder();
         this.getServer().getPluginManager().registerEvents(eventHandler, this);
     }
     private boolean isSenderPlayer(CommandSender sender){
@@ -59,26 +64,37 @@ public final class Main extends JavaPlugin {
             }
         }
     }
+
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if(label.equalsIgnoreCase("pvp_class") & args.length > 0){
+        if(sender.isOp() & label.equalsIgnoreCase("start")){
             if(hasGameStarted){
                 sender.sendMessage("Game has started");
-                return false;
+
+                return true;
+            }
+            worldHandler.startShrinkBorder(this);
+            resetPlayerStatus();
+
+        }
+        if(label.equalsIgnoreCase("pvp_ability") & args.length > 0){
+            if(hasGameStarted){
+                sender.sendMessage("Game has started");
+                return true;
             }
             if(!isSenderPlayer(sender)){
                 sender.sendMessage("Sender is not Player");
-                return false;
+                return true;
             }
             if(args.length <= 0) {
                 sender.sendMessage("Ability Name not provided");
-                return false;
+                return true;
             }
             String abilityName = args[0].toLowerCase();
 
             if(!doesAbilityExist(abilityName)){
                 sender.sendMessage("Ability Does not Exist");
-                return false;
+                return true;
             }
             Player player = (Player) sender;
             UUID playerUUID = getPlayerUUID(player);
@@ -88,16 +104,17 @@ public final class Main extends JavaPlugin {
             }
             PlayerInstance senderInstance = createNewPlayerInstance(playerUUID,abilityName);
             playerList.add(senderInstance);
+            sender.sendMessage("Ability has been chosen: " + args[0]);
         }
         else if(label.equalsIgnoreCase("pvp_team")){
             if(hasGameStarted){
-                return false;
+                return true;
             }
             if(!isSenderPlayer(sender)) {
-                return false;
+                return true;
             }
             if(args.length <= 0){
-                return false;
+                return true;
             }
             Player senderPlayer = (Player) sender;
             UUID uuidPlayer = senderPlayer.getUniqueId();
