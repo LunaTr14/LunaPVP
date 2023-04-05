@@ -58,7 +58,7 @@ public class LunaEventHandler implements Listener {
       UUID playerUUID = player.getUniqueId();
       if(!(isEventRightClick(event) | isPlayerHoldingStick(player) | plugin.isPlayerInList(playerUUID)))return;
       PlayerInstance instance = getPlayerFromList(playerUUID);
-      instance.rightClickAbility();
+      instance.rightClickAbility(event);
    }
    @EventHandler
    public void onEntityDamage(EntityDamageByEntityEvent event){
@@ -69,6 +69,6 @@ public class LunaEventHandler implements Listener {
       if(!plugin.isPlayerInList(damagerPlayer.getUniqueId()))return;
       if(!isPlayerHoldingStick(damagerPlayer)) return;
       PlayerInstance damagerInstance = getPlayerFromList(damagerUUID);
-      damagerInstance.playerHitAbility(targetPlayer);
+      damagerInstance.playerHitAbility(event);
    }
 }

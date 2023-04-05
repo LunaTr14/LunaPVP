@@ -1,25 +1,21 @@
 package me.luna.playerClasses;
 
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class Damage extends AbilityTemplate{
-	public Damage() {
-		this.classID = 2;
-		this.className = "UltraDamage";
-	}
-    @Override
-    public void activatedAbility() {
-        if(!checkCooldown()){
-            return;
-        }
-        player.addPotionEffect(new PotionEffect(PotionEffectType.INCREASE_DAMAGE,100,0));
-        cooldownTime = System.currentTimeMillis();
+    private static float DAMAGE_MULTIPLIER = 0.1f;
+
+    private double increaseDamage(double damage){
+        return damage + (damage * DAMAGE_MULTIPLIER);
     }
+    public Damage() {}
 
     @Override
-    public void playerHitAbility(Player attackedPlayer) {
-        attackedPlayer.setHealth(attackedPlayer.getHealth() - 4);
+    public void playerHitAbility(EntityDamageByEntityEvent hitEvent) {
+        double base_damage = hitEvent.getDamage();
+        hitEvent.setDamage(increaseDamage(base_damage));
     }
 }

@@ -6,6 +6,8 @@ import java.util.UUID;
 import org.bukkit.entity.Player;
 
 import me.luna.playerClasses.AbilityTemplate;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 
 public class PlayerInstance {
 	private AbilityTemplate ability;
@@ -13,31 +15,33 @@ public class PlayerInstance {
 	private String team = "";
 	private long lastActivation = 0;
 	private UUID playerUUID;
-
+	private int ABILITY_COOLDOWN_SECONDS = 5;
 	public PlayerInstance(UUID playerUUID){
 		this.playerUUID = playerUUID;
 	}
 
-	public boolean hasCooldownPassed(){
-		return lastActivation - System.currentTimeMillis() > Main.ABILITY_COOLDOWN_SECONDS;
+	private boolean hasCooldownPassed(){
+		return lastActivation - System.currentTimeMillis() > ABILITY_COOLDOWN_SECONDS;
 	}
-	protected UUID getPlayerUUID() {
+	public UUID getPlayerUUID() {
 		return this.playerUUID;
 	}
 
 	public void setAbility(AbilityTemplate abilityClass){
-		this.ability = abilityClass.newInstance();
+		this.ability = abilityClass;
 	}
 
-	public void playerHitAbility(Player defender){
+	public void playerHitAbility(EntityDamageByEntityEvent event){
+		if(isPlayerDead) return;
 		if(!hasCooldownPassed())return;
-		ability.playerHitAbility(defender);
+		ability.playerHitAbility(event);
 		lastActivation = System.currentTimeMillis();
 	}
 
-	public void rightClickAbility(){
+	public void rightClickAbility(PlayerInteractEvent event){
+		if(isPlayerDead)return;
 		if(!hasCooldownPassed())return;
-		ability.rightClickAbility();
+		ability.rightClickAbility(event);
 		lastActivation = System.currentTimeMillis();
 	}
 

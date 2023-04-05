@@ -1,29 +1,28 @@
 package me.luna.playerClasses;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public class Gravity extends AbilityTemplate{
-	public Gravity() {
-		this.className = "Gravity";
-		this.classID = 5;
-	}
-    public void activatedAbility() {
-        if(!checkCooldown()){
-            return;
-        }
-        player.teleport(player.getLocation().add(0,25,0));
-        player.removePotionEffect(PotionEffectType.SLOW_FALLING);
-        player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 600, 1));
-        cooldownTime = System.currentTimeMillis();
+
+    private static int PASSIVE_HEIGHT = 40;
+    private static int OFFENSE_HEIGHT = 30;
+    private Location calculateTPHeight(Location baseLocation, int height){
+        return baseLocation.add(0,height,0);
+    }
+    @Override
+    public void playerHitAbility(EntityDamageByEntityEvent event) {
+        Player attackedPlayer = (Player) event.getEntity();
+        Location attacedPlayerPos = attackedPlayer.getLocation();
+        attackedPlayer.teleport(calculateTPHeight(attacedPlayerPos, OFFENSE_HEIGHT));
     }
 
-    public void playerHitAbility(Player attackedPlayer) {
-        if(!checkCooldown()){
-            return;
-        }
-        attackedPlayer.teleport(attackedPlayer.getLocation().add(0,25,0));
-        cooldownTime = System.currentTimeMillis();
+    @Override
+    public void rightClickAbility(PlayerInteractEvent event) {
+        player.teleport(calculateTPHeight(player.getLocation(),PASSIVE_HEIGHT));
     }
 }

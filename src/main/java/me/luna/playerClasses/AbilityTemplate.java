@@ -1,21 +1,24 @@
 package me.luna.playerClasses;
 
+import net.md_5.bungee.api.chat.hover.content.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+
+import java.util.UUID;
 
 public class AbilityTemplate {
     public Player player;
 
-    public AbilityTemplate(Player p){
-        this.player = p;
+    public void setPlayer(Player player){
+        this.player = player;
     }
-    public void rightClickAbility(){
+    public void rightClickAbility(PlayerInteractEvent event){}
+
+    public void playerHitAbility(EntityDamageByEntityEvent event){
+
     }
-
-    public void playerHitAbility(Player defender){
-
-    }
-
-    public AbilityTemplate newInstance(){
-        return new AbilityTemplate(player);
+    public AbilityTemplate createNewInstance(){
+        return new AbilityTemplate();
     }
 }
