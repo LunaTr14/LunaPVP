@@ -33,7 +33,7 @@ public class AirDrop {
     }
 
     private int getMaxZAxis(){
-        return (int) getBorderRadius() + getBorderCenter().getZ());
+        return (int) (getBorderRadius() + getBorderCenter().getZ());
     }
 
     private Location getRandomLocation(){
