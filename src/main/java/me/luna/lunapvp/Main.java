@@ -30,6 +30,14 @@ public final class Main extends JavaPlugin {
         worldHandler.initWorldBorder();
         this.getServer().getPluginManager().registerEvents(eventHandler, this);
     }
+    private void resetPlayerStatus(){
+        for(PlayerInstance instance : playerList){
+            Player p =this.getServer().getPlayer(instance.getPlayerUUID());
+            p.setHealth(20);
+            p.setSaturation(20);
+            p.getInventory().clear();
+        }
+    }
     private boolean isSenderPlayer(CommandSender sender){
         return sender instanceof Player;
     }
@@ -41,6 +49,7 @@ public final class Main extends JavaPlugin {
     private PlayerInstance createNewPlayerInstance(UUID playerUUID, String abilityName) {
         PlayerInstance instance = new PlayerInstance(playerUUID);
         AbilityTemplate ability = abilities.get(abilityName).createNewInstance();
+        ability.player = this.getServer().getPlayer(playerUUID);
         instance.setAbility(ability);
         return instance;
     }
@@ -131,14 +140,10 @@ public final class Main extends JavaPlugin {
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
         List<String> list = new ArrayList<>();
-        if(command.getName().equalsIgnoreCase("ability") && args.length >= 0){
+        if(command.getName().equalsIgnoreCase("pvp_ability") && args.length >= 0){
             if(sender instanceof Player){
                 list.add("Gravity");
-                list.add("Ghost");
-                list.add("Cannon");
-                list.add("UltraDamage");
-                list.add("Warp");
-                list.add("Medusa");
+                list.add("Damage");
                 list.add("Miner");
             }
         }
