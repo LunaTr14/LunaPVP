@@ -1,22 +1,13 @@
 package me.luna.lunapvp;
 
-import org.bukkit.GameMode;
 import org.bukkit.Material;
-import org.bukkit.Server;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
-
-import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.UUID;
 
 public class LunaEventHandler implements Listener {

@@ -1,6 +1,5 @@
 package me.luna.lunapvp;
 
-import java.util.Random;
 import java.util.UUID;
 
 import org.bukkit.entity.Player;

@@ -4,8 +4,6 @@ import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 public class Gravity extends AbilityTemplate{
 
@@ -17,8 +15,8 @@ public class Gravity extends AbilityTemplate{
     @Override
     public void playerHitAbility(EntityDamageByEntityEvent event) {
         Player attackedPlayer = (Player) event.getEntity();
-        Location attacedPlayerPos = attackedPlayer.getLocation();
-        attackedPlayer.teleport(calculateTPHeight(attacedPlayerPos, OFFENSE_HEIGHT));
+        Location attackedPlayerPos = attackedPlayer.getLocation();
+        attackedPlayer.teleport(calculateTPHeight(attackedPlayerPos, OFFENSE_HEIGHT));
     }
 
     @Override

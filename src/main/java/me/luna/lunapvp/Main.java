@@ -5,10 +5,6 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scheduler.BukkitRunnable;
-
-import me.luna.playerClasses.UltraDamage;
-
 import java.util.*;
 
 public final class Main extends JavaPlugin {
@@ -25,16 +21,10 @@ public final class Main extends JavaPlugin {
     }
     public void onEnable() {
         initAbilities();
-        playerInstanceList = new LinkedList<>();
         eventHandler = new LunaEventHandler(this);
         gameHandler = new GameHandler(this);
         this.getServer().getPluginManager().registerEvents(eventHandler, this);
     }
-
-    private Player getPlayerFromUUID(UUID playerUUID){
-        return this.getServer().getPlayer(playerUUID);
-    }
-
     private boolean isSenderPlayer(CommandSender sender){
         return sender instanceof Player;
     }
@@ -49,7 +39,7 @@ public final class Main extends JavaPlugin {
         instance.setAbility(ability);
         return instance;
     }
-    private boolean isPlayerInList(UUID playerUUID){
+    public boolean isPlayerInList(UUID playerUUID){
         for(PlayerInstance instance : playerList){
             if(playerUUID == instance.getPlayerUUID()){
                 return true;
@@ -71,7 +61,6 @@ public final class Main extends JavaPlugin {
     }
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-
         if(label.equalsIgnoreCase("pvp_class") & args.length > 0){
             if(hasGameStarted){
                 sender.sendMessage("Game has started");
@@ -84,11 +73,10 @@ public final class Main extends JavaPlugin {
             if(args.length <= 0) {
                 sender.sendMessage("Ability Name not provided");
                 return false;
-
             }
             String abilityName = args[0].toLowerCase();
 
-            if(! doesAbilityExist(abilityName)){
+            if(!doesAbilityExist(abilityName)){
                 sender.sendMessage("Ability Does not Exist");
                 return false;
             }
