@@ -101,11 +101,24 @@ public final class Main extends JavaPlugin {
             PlayerInstance senderInstance = createNewPlayerInstance(playerUUID,abilityName);
             playerList.add(senderInstance);
         }
-
         else if(label.equalsIgnoreCase("pvp_team")){
-            if(!isSenderPlayer(sender)){
+            if(hasGameStarted){
                 return false;
             }
+            if(!isSenderPlayer(sender)) {
+                return false;
+            }
+            if(args.length <= 0){
+                return false;
+            }
+            Player senderPlayer = (Player) sender;
+            UUID uuidPlayer = senderPlayer.getUniqueId();
+            String team_id = args[0].toLowerCase();
+            if(isPlayerInList(uuidPlayer)){
+                removePlayerFromList(uuidPlayer);
+            }
+            PlayerInstance playerInstance = new PlayerInstance(uuidPlayer);
+            playerInstance.setTeam(team_id);
         }
         return true;
     }

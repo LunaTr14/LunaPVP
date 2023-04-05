@@ -10,6 +10,7 @@ import me.luna.playerClasses.AbilityTemplate;
 public class PlayerInstance {
 	private AbilityTemplate ability;
 	public boolean isPlayerDead = false;
+	private String team = "";
 	private long lastActivation = 0;
 	private UUID playerUUID;
 
@@ -38,5 +39,13 @@ public class PlayerInstance {
 		if(!hasCooldownPassed())return;
 		ability.rightClickAbility();
 		lastActivation = System.currentTimeMillis();
+	}
+
+	public void setTeam(String team_id){
+		this.team = team_id;
+	}
+
+	public String getTeam(){
+		return this.team;
 	}
 }
