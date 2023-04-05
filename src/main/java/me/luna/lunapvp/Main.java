@@ -12,7 +12,7 @@ import me.luna.playerClasses.UltraDamage;
 import java.util.*;
 
 public final class Main extends JavaPlugin {
-    private EventHandler eventHandler;
+    private LunaEventHandler eventHandler;
     private GameHandler gameHandler;
     public volatile LinkedList<PlayerInstance> playerList = new LinkedList<PlayerInstance>();
     public static HashMap<String, AbilityTemplate> abilities = new HashMap<>();
@@ -26,7 +26,7 @@ public final class Main extends JavaPlugin {
     public void onEnable() {
         initAbilities();
         playerInstanceList = new LinkedList<>();
-        eventHandler = new EventHandler(this);
+        eventHandler = new LunaEventHandler(this);
         gameHandler = new GameHandler(this);
         this.getServer().getPluginManager().registerEvents(eventHandler, this);
     }
