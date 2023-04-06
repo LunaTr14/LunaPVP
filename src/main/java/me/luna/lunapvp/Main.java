@@ -1,9 +1,13 @@
 package me.luna.lunapvp;
 
 import me.luna.playerClasses.*;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.*;
@@ -14,6 +18,7 @@ public final class Main extends JavaPlugin {
     public volatile LinkedList<PlayerInstance> playerList = new LinkedList<PlayerInstance>();
     public static HashMap<String, AbilityTemplate> abilities = new HashMap<>();
     public static String WORLD_NAME = "world";
+    public boolean isPvPEnabled = false;
     private boolean hasGameStarted = false;
 
     private static void initAbilities(){
@@ -28,7 +33,6 @@ public final class Main extends JavaPlugin {
         worldHandler = new WorldHandler();
         worldHandler.setWorld(this.getServer().getWorld(WORLD_NAME));
         worldHandler.initWorldBorder();
-        this.getServer().getPluginManager().registerEvents(eventHandler, this);
     }
     private void resetPlayerStatus(){
         for(PlayerInstance instance : playerList){
@@ -44,6 +48,14 @@ public final class Main extends JavaPlugin {
 
     private UUID getPlayerUUID(Player p){
         return p.getUniqueId();
+    }
+    private void givePlayerStick(){
+        for(PlayerInstance instance :playerList){
+            Player p = getServer().getPlayer(instance.getPlayerUUID());
+            if(p.isOnline()){
+                p.getInventory().addItem(new ItemStack(Material.STICK,1));
+            }
+        }
     }
 
     private PlayerInstance createNewPlayerInstance(UUID playerUUID, String abilityName) {
@@ -73,22 +85,32 @@ public final class Main extends JavaPlugin {
             }
         }
     }
+    private void teleportPlayers(){
+        World world = getServer().getWorld(WORLD_NAME);
+        int highestY = world.getHighestBlockYAt(0,0);
+        Location blockLocation = new Location(world,0,highestY,0);
+        for(PlayerInstance instance : playerList){
+            getServer().getPlayer(instance.getPlayerUUID()).teleport(blockLocation);
+        }
+    }
+
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         if(sender.isOp() & label.equalsIgnoreCase("start")){
             if(hasGameStarted){
                 sender.sendMessage("Game has started");
-
                 return true;
             }
             worldHandler.startShrinkBorder(this);
             resetPlayerStatus();
-
+            givePlayerStick();
+            teleportPlayers();
         }
         if(label.equalsIgnoreCase("pvp_ability") & args.length > 0){
             if(hasGameStarted){
                 sender.sendMessage("Game has started");
+                this.getServer().getPluginManager().registerEvents(eventHandler, this);
                 return true;
             }
             if(!isSenderPlayer(sender)){
