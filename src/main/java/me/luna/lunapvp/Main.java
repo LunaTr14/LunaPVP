@@ -9,6 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 
@@ -19,6 +20,7 @@ public final class Main extends JavaPlugin {
     public static HashMap<String, AbilityTemplate> abilities = new HashMap<>();
     public static String WORLD_NAME = "world";
     public boolean isPvPEnabled = false;
+    private static int GRACEPERIOD_SECONDS = 1;
     private boolean hasGameStarted = false;
 
     private static void initAbilities(){
@@ -94,6 +96,16 @@ public final class Main extends JavaPlugin {
         }
     }
 
+    private void startGravePeriod(){
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                isPvPEnabled = true;
+                getServer().broadcastMessage("PVP IS ENABLED,Grace Period has been disabled");
+            }
+        }.runTaskLater(this,GRACEPERIOD_SECONDS);
+    }
+
 
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
@@ -106,11 +118,14 @@ public final class Main extends JavaPlugin {
             resetPlayerStatus();
             givePlayerStick();
             teleportPlayers();
+            startGravePeriod();
+            getServer().broadcastMessage("PvP is enabled in " + GRACEPERIOD_SECONDS + " seconds");
+            hasGameStarted = true;
+            this.getServer().getPluginManager().registerEvents(eventHandler,this);
         }
         if(label.equalsIgnoreCase("pvp_ability") & args.length > 0){
             if(hasGameStarted){
                 sender.sendMessage("Game has started");
-                this.getServer().getPluginManager().registerEvents(eventHandler, this);
                 return true;
             }
             if(!isSenderPlayer(sender)){

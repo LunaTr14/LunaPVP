@@ -56,8 +56,10 @@ public class LunaEventHandler implements Listener {
       if(!(isEntityPlayer(event.getDamager()) & isEntityPlayer(event.getEntity()))) return;
       Player damagerPlayer = (Player) event.getDamager();
       UUID damagerUUID = damagerPlayer.getUniqueId();
-      Player targetPlayer = (Player) event.getEntity();
-      if(!plugin.isPvPEnabled)return;
+      if(!plugin.isPvPEnabled){
+         event.setCancelled(true);
+         return;
+      }
       if(!plugin.isPlayerInList(damagerPlayer.getUniqueId()))return;
       if(!isPlayerHoldingStick(damagerPlayer)) return;
       PlayerInstance damagerInstance = getPlayerFromList(damagerUUID);
