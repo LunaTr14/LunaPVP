@@ -10,6 +10,3 @@ commands:
   pvp_ability:
     usage: "Usage: /pvp_ability [Ability]"
     description: Works for all players before game start
-  pvp_team:
-    usage: "Usage: /pvp_team [Team_Name]"
-    description: Works for all players before game start
