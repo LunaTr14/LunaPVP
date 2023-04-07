@@ -13,13 +13,12 @@ public class PlayerInstance {
 	private String team = "";
 	private long lastActivation = 0;
 	private final UUID playerUUID;
-	private final int ABILITY_COOLDOWN_SECONDS = 5;
 	public PlayerInstance(UUID playerUUID){
 		this.playerUUID = playerUUID;
 	}
 
 	private boolean hasCooldownPassed(){
-		return System.currentTimeMillis() - lastActivation  > ABILITY_COOLDOWN_SECONDS * 1000L;
+		return System.currentTimeMillis() - lastActivation  > ability.abilityCooldown * 1000L;
 	}
 	public UUID getPlayerUUID() {
 		return this.playerUUID;
@@ -30,7 +29,7 @@ public class PlayerInstance {
 	}
 
 	public void sendCooldownMessage(Player p){
-		p.sendMessage("Cooldown has not Finished\nRemaining: " + (ABILITY_COOLDOWN_SECONDS - ((System.currentTimeMillis() - lastActivation) / 1000)));
+		p.sendMessage("Cooldown has not Finished\nRemaining: " + (this.ability.abilityCooldown - ((System.currentTimeMillis() - lastActivation) / 1000)));
 	}
 
 	public void playerHitAbility(EntityDamageByEntityEvent event){
@@ -57,7 +56,4 @@ public class PlayerInstance {
 		this.team = team_id;
 	}
 
-	public String getTeam(){
-		return this.team;
-	}
 }

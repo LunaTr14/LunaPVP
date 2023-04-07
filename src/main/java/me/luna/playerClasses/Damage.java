@@ -1,19 +1,26 @@
 package me.luna.playerClasses;
 
 
+import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 public class Damage extends AbilityTemplate{
-    private static float DAMAGE_MULTIPLIER = 0.1f;
 
-    private double increaseDamage(double damage){
-        return damage + (damage * DAMAGE_MULTIPLIER);
+    int DAMAGE = 8;
+
+    public Damage() {
+        this.abilityCooldown = 2;
     }
-    public Damage() {}
 
     @Override
     public void playerHitAbility(EntityDamageByEntityEvent hitEvent) {
-        double base_damage = hitEvent.getDamage();
-        hitEvent.setDamage(increaseDamage(base_damage));
+        Player p = (Player) hitEvent.getEntity();
+        if(p.getHealth() - DAMAGE > 0){
+            p.setHealth(p.getHealth() - DAMAGE);
+        }
+    }
+    @Override
+    public AbilityTemplate createNewInstance() {
+        return new Damage();
     }
 }

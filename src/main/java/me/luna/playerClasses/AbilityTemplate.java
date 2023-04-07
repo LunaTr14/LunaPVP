@@ -5,10 +5,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 public class AbilityTemplate {
     public Player player;
+    public int abilityCooldown = 5;
 
-    public void setPlayer(Player player){
-        this.player = player;
-    }
     public void rightClickAbility(PlayerInteractEvent event){}
 
     public void playerHitAbility(EntityDamageByEntityEvent event){
