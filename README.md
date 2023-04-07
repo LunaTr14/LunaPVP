@@ -1,18 +1,32 @@
 # Luna PVP
 
+A Battle Royale with custom abilities
+
 ## Commands
-- /ability [Ability]: choose ability (Select before game start)
-- /team [Team ID]: change team (Select Before Game Start)
+- /pvp_ability [Ability]: Choose ability (Select before game start)
+- /start: Starts the game (Op Usage only)
 
 ## Activating Abilities:
 - Right Click Air / Block
-- Left Click Air / Block
 - Player Hit
 
 ## Abilities:
-- Cannon: Explode 3 Blocks in front of you
-- UltraDamage: High Damage Potion Effect is given for 10 seconds
-- Miner: Break all blocks in a 6x6x6 area
-- Ghost: Go into spectator mode for 3 seconds, given Slowness and Blindness
-- Medusa: Generate a 3x3x3 area on where you stand
-- Warp Teleport Player on Hit and Teleport to random location when right click
+- Damage: 
+  - Removed 4 hearts per hit > 4 Hearts 
+  - Delay 2 Seconds
+  - Cannot be used for final hit to kill
+- Miner: Mines an Area based on Activation
+  - Delay: 5 Seconds
+  - Right Click:
+      - 3 x 4 x 3
+        - Collects Blocks
+      - Player Hit:
+        - 5 x 4 x 5
+      - Does not collect Blocks
+- Gravity: Teleports Players to a higher point
+  - Delay: 5 Seconds
+  - Player Hit:
+    - Opponent is teleported 15 Blocks above current position
+  - Right Click:
+    - Player is teleported 20 blocks above
+    - Player is given slow falling for 100 ticks
