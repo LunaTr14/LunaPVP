@@ -11,7 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.HashMap;
 
 public class Miner extends AbilityTemplate {
-    private static int OFFENSE_RADIUS = 2;
+    private static int OFFENSE_RADIUS = 5;
     private static int PASSIVE_RADIUS = 3;
     private HashMap<Material,Integer> dropItems = new HashMap<>();
 
@@ -22,14 +22,14 @@ public class Miner extends AbilityTemplate {
     }
 
     private void mineArea(Location loc, int radius){
-        int xCursor = (int) loc.getX() - radius;
-        int yCursor = (int) loc.getY() - 2;
-        int zCursor = (int) loc.getZ() - radius;
+        int xCursor = (int) loc.getX();
+        int yCursor = (int) loc.getY();
+        int zCursor = (int) loc.getZ();
         World w = loc.getWorld();
 
-            for(int x = 0; x  < radius; x++) {
-                for (int y = 0; y < 4; y++) {
-                    for (int z = 0; z < radius ; z++) {
+            for(int x = -radius; x  < radius; x++) {
+                for (int y = -2; y < 4; y++) {
+                    for (int z = -radius; z < radius ; z++) {
                         Block b = w.getBlockAt(x + xCursor,y + yCursor,z + zCursor);
                         Material blockMaterial = b.getType();
                         if(blockMaterial != Material.AIR & blockMaterial != Material.BEDROCK) {
