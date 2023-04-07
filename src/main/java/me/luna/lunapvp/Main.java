@@ -20,7 +20,7 @@ public final class Main extends JavaPlugin {
     public static HashMap<String, AbilityTemplate> abilities = new HashMap<>();
     public static String WORLD_NAME = "world";
     public boolean isPvPEnabled = false;
-    private static int GRACEPERIOD_SECONDS = 1;
+    private static int GRACEPERIOD_SECONDS =300;
     private boolean hasGameStarted = false;
 
     private static void initAbilities(){
