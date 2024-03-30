@@ -1,4 +1,4 @@
-package me.luna.custom;
+package me.luna.ability;
 
 import org.bukkit.entity.Entity;
 import org.bukkit.event.Event;
@@ -9,6 +9,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 
 public class AbilityTemplate {
 
+    public int delay = 5;
     public void activate(Event e) {
 
     }
