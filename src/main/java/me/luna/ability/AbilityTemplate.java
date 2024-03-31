@@ -10,33 +10,21 @@ import org.bukkit.event.player.PlayerInteractEvent;
 public class AbilityTemplate {
 
     public int delay = 5;
-    public void activate(Event e) {
-
+    public boolean activate(Event e) {
+        return true;
     }
     protected boolean isEventPlayerInteract(Event e){
-        if(e instanceof PlayerInteractEvent){
-            return true;
-        }
-        return false;
+        return e instanceof PlayerInteractEvent;
     }
 
     protected boolean isEventEntityHit(Event e){
-        if(e instanceof EntityDamageByEntityEvent){
-            return true;
-        }
-        return false;
+        return e instanceof EntityDamageByEntityEvent;
     }
     protected boolean isLeftClick(Action action){
-        if(action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK){
-            return true;
-        }
-        return false;
+        return action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK;
     }
     protected boolean isRightClick(Action action){
-        if(action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK){
-            return true;
-        }
-        return false;
+        return action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK;
     }
 
     protected Entity getDamager(EntityDamageByEntityEvent e){
