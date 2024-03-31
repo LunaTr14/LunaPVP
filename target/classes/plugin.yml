@@ -1,15 +1,12 @@
 name: LunaPVP
 version: '3.0'
-main: me.luna.lunapvp.main
+main: me.luna.Main
 api-version: 1.17
 authors: [Luna]
 commands:
-  start:
-    usage: "Usage: /start"
-    description: Starts game only for OP
-  ability:
-    usage: "Usage: /ability [Quirk]"
-    description: Works for all players before game start
-  team:
-    usage: "Usage: /team [teamName]"
+  game:
+    usage: "Usage: /game [subcommand]"
+    description: Handles game commands only for OP
+  class:
+    usage: "Usage: /class [Ability]"
     description: Works for all players before game start
