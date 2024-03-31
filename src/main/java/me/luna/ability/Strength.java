@@ -4,14 +4,18 @@ import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
 public class Strength extends AbilityTemplate{
-    private float DAMAGE_BOOSTER = 3f;
+    private final float DAMAGE_BOOSTER = 4f;
 
-    int delay = 0;
+    public Strength(){
+        delay = 0;
+    }
     @Override
-    public void activate(Event e) {
-        if(!isEventEntityHit(e)) return;
+    public boolean activate(Event e) {
+        if(!isEventEntityHit(e)) return false;
         EntityDamageByEntityEvent damageEvent = (EntityDamageByEntityEvent) e;
         double baseDamage = damageEvent.getDamage();
         damageEvent.setDamage(baseDamage * DAMAGE_BOOSTER);
+
+        return true;
         }
 }
