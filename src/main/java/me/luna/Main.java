@@ -35,10 +35,18 @@ public final class Main extends JavaPlugin {
         if(sender.isOp() && label.equalsIgnoreCase("game")){
             if(args[0].equalsIgnoreCase("start") && ! gameController.hasGameStarted ) {
                 gameController.startGame();
+                this.getServer().broadcastMessage("Game has begun, Ability activation item is stick");
             }
             else if(args[0].equalsIgnoreCase("disable")){
                 this.getPluginLoader().disablePlugin(this);
-
+            }
+            else if(args[0].equalsIgnoreCase("pvp")){
+                if(args[1].equalsIgnoreCase("enable")){
+                    this.eventHandler.isPvPAllowed = true;
+                }
+                else if (args[1].equalsIgnoreCase("disable")){
+                    this.eventHandler.isPvPAllowed = false;
+                }
             }
         }
 

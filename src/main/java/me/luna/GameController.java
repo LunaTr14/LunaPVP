@@ -66,7 +66,7 @@ public class GameController {
             setHunger(p, 20);
             setHealth(p, 20);
             clearInventory(p);
-            teleportPlayer(p, 0, getHighestBlock(world, 0, 0), 0);
+            teleportPlayer(p, 0, getHighestBlock(world, 0, 0) + 2, 0);
         }
 
         setBorderCenter(0, 0);
