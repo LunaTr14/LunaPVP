@@ -43,11 +43,12 @@ public class EventHandler implements Listener {
         if (!playerAbilityAllowed.containsKey(activator)) {
             playerAbilityAllowed.put(activator, true);
         }
-        if (!playerAbilityAllowed.get(activator)) {
-            activator.sendMessage("Delay is still active");
-            return;
-        }
+
         if (isPlayerHoldingStick(activator)) {
+            if (!playerAbilityAllowed.get(activator)) {
+                activator.sendMessage("Delay is still active");
+                return;
+            }
             if (Main.ABILITY_ARRAY[plugin.playerAbilityHashMap.get(activator)].activate(event)) {
                 playerAbilityAllowed.put(activator, false);
                 new BukkitRunnable() {
@@ -76,13 +77,12 @@ public class EventHandler implements Listener {
             playerAbilityAllowed.put(playerDamager, true);
         }
 
-        // Verifies Delay
-        if (!playerAbilityAllowed.get(playerDamager)) {
-            playerDamager.sendMessage("Delay is still active");
-            return;
-        }
-
         if (isPlayerHoldingStick(playerDamager)) {
+            // Verifies Delay
+            if (!playerAbilityAllowed.get(playerDamager)) {
+                playerDamager.sendMessage("Delay is still active");
+                return;
+            }
             if (Main.ABILITY_ARRAY[plugin.playerAbilityHashMap.get(playerDamager)].activate(event)) {
                 playerAbilityAllowed.put(playerDamager, false);
                 new BukkitRunnable() {
