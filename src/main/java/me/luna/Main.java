@@ -17,7 +17,7 @@ import java.util.*;
 
 public final class Main extends JavaPlugin {
 
-    public final static AbilityTemplate[] ABILITY_ARRAY = {new Strength(), new Gravity()};
+    public final static AbilityTemplate[] ABILITY_ARRAY = {new Strength(), new Gravity(), new Paralysis()};
 
     public volatile HashMap<Player,Integer> playerAbilityHashMap = new HashMap<>();
     public final GameController gameController = new GameController(this);
@@ -56,6 +56,10 @@ public final class Main extends JavaPlugin {
                     case "gravity":
                         this.playerAbilityHashMap.put(((Player) sender).getPlayer(), 1);
                         sender.sendMessage("Gravity has been Selected");
+                        break;
+                    case "paralysis":
+                        this.playerAbilityHashMap.put(((Player) sender).getPlayer(), 2);
+                        sender.sendMessage("Paralysis has been Selected");
                         break;
                 default:
                     sender.sendMessage("Invalid Class Name");
