@@ -61,6 +61,21 @@ public final class Main extends JavaPlugin {
                     sender.sendMessage("Invalid Class Name");
                 }
         }
+        else if (label.equalsIgnoreCase("about") && args.length > 0){
+            String class_name = args[0];
+            switch (class_name) {
+                case "strength":
+                    sender.sendMessage("Strength multiplies damage of a stick by a factor of "+ ((Strength) ABILITY_ARRAY[0]).DAMAGE_BOOSTER);
+                    break;
+                case "gravity":
+                    sender.sendMessage("Gravity on Right Click: Teleports player to the sky and applies slow falling");
+                    sender.sendMessage("Gravity on Player attack: Teleports attacked player to the sky without slow falling");
+                    break;
+                case "paralysis":
+                    sender.sendMessage("Paralysis on Player Attack: Applies Blindness and Slowness" + ((Paralysis) ABILITY_ARRAY[2]).POTION_LENGTH / 20 +" seconds");
+                    break;
+            }
+        }
         return true;
     }
 
@@ -69,8 +84,8 @@ public final class Main extends JavaPlugin {
         if(command.getName().equalsIgnoreCase("game") && sender.isOp()){
             return List.of(new String[]{"start", "disable"});
         }
-        else if (command.getName().equalsIgnoreCase("class")){
-            return List.of(new String[]{"strength","gravity"});
+        else if (command.getName().equalsIgnoreCase("class") || command.getName().equalsIgnoreCase("about")){
+            return List.of(new String[]{"strength","gravity","paralysis"});
         }
         return super.onTabComplete(sender, command, alias, args);
     }
