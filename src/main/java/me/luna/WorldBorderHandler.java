@@ -22,6 +22,12 @@ public class WorldBorderHandler {
     public double getBorderSize(){
         return this.worldBorder.getSize();
     }
+
+    public Location getBorderCenter(){
+        return this.worldBorder.getCenter();
+    }
+
+
     protected void testBorderCenter(){
         this.setCenter(0,0);
         try {
