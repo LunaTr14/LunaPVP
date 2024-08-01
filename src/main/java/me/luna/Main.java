@@ -20,15 +20,21 @@ public final class Main extends JavaPlugin {
     public final static AbilityTemplate[] ABILITY_ARRAY = {new Strength(), new Gravity(), new Paralysis()};
 
     public volatile HashMap<Player,Integer> playerAbilityHashMap = new HashMap<>();
-    public final GameController gameController = new GameController(this);
+    public WorldBorderHandler worldBorderHandler = null;
     public EventHandler eventHandler = new EventHandler();
 
     public long getNow(){
         return System.currentTimeMillis();
     }
+    private static boolean IS_DEBUG = true;
     @Override
     public void onEnable() {
         eventHandler.registerHandler(this);
+        this.worldBorderHandler = new WorldBorderHandler(getServer().getWorlds().get(0));
+        if(IS_DEBUG){
+            this.worldBorderHandler.testBorderSize();
+            this.worldBorderHandler.testBorderCenter();
+        }
     }
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
