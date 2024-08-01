@@ -3,6 +3,17 @@ Created By: Luna T
 Edited Last: 25/4/2022
 Purpose: Handles Events like Player Hit, Movement
 */
+
+
+// TODO:
+/*
+* Split Class:
+* - PlayerHandler
+* - AttackHandler
+* - EventHandler
+*
+* */
+
 package me.luna;
 
 import org.bukkit.GameMode;
