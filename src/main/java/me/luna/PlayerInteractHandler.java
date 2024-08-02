@@ -23,7 +23,6 @@ public class PlayerInteractHandler implements Listener {
         AbilityTemplate abilityObject = plugin.playerAbilityHashMap.get(player.getDisplayName());
         if(abilityObject.hasDelayCompleted() && abilityObject.isPlayerHoldingStick(player)) {
             abilityObject.activate(e);
-            abilityObject.addDelay();
         }
         player = null;
         abilityObject = null;

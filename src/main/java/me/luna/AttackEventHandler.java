@@ -25,7 +25,6 @@ public class AttackEventHandler implements Listener {
             AbilityTemplate abilityObject = plugin.playerAbilityHashMap.get(damager.getDisplayName());
             if(abilityObject.hasDelayCompleted() && abilityObject.isPlayerHoldingStick(damager)) {
                 abilityObject.activate(e);
-                abilityObject.addDelay();
             }
             damager = null;
             abilityObject = null;
