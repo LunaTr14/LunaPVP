@@ -15,9 +15,9 @@ public class Gravity extends AbilityTemplate {
 
     @Override
     public boolean activate(Event e) {
-        if (isEventPlayerInteract(e)) {
+        if (e instanceof  PlayerInteractEvent) {
             PlayerInteractEvent interactEvent = (PlayerInteractEvent) e;
-            Player p = ((PlayerInteractEvent) e).getPlayer();
+            Player p = interactEvent.getPlayer();
             if (isRightClick(interactEvent.getAction())) {
                 p.getPlayer().teleport(p.getLocation().add(0, 10, 0));
                 p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 20 * 15, 1));

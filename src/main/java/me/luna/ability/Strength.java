@@ -15,7 +15,6 @@ public class Strength extends AbilityTemplate{
         EntityDamageByEntityEvent damageEvent = (EntityDamageByEntityEvent) e;
         double baseDamage = damageEvent.getDamage();
         damageEvent.setDamage(baseDamage * DAMAGE_BOOSTER);
-
         return true;
         }
 }
