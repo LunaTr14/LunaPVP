@@ -35,6 +35,7 @@ public final class Main extends JavaPlugin {
     protected static double BORDER_SHRINK_SPEED_SECONDS = 150; // Border takes 2.5 minutes to reach new size
     protected static double TIME_TILL_PVP = 180; // 3 Minutes until PvP is active
     protected static long SCOREBOARD_UPDATE_DELAY_MS = 100;
+    protected static long BORDER_DEFAULT_SIZE = 5000;
 
     @Override
     public void onEnable() {
@@ -56,6 +57,7 @@ public final class Main extends JavaPlugin {
         if(sender.isOp() && label.equalsIgnoreCase("game")) {
             if (args[0].equalsIgnoreCase("start") && !hasGameStarted) {
                 worldBorderHandler.setCenter(0,0);
+                worldBorderHandler.shrinkBorder(BORDER_DEFAULT_SIZE,0);
                 Location teleportLocation = worldBorderHandler.getBorderCenter();
                 teleportLocation.setY(teleportLocation.getWorld().getHighestBlockYAt(teleportLocation) + 3 );
                 for(Player onlinePlayer : this.getServer().getOnlinePlayers()){
