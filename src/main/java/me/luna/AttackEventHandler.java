@@ -16,7 +16,7 @@ public class AttackEventHandler implements Listener {
     }
     @EventHandler
     public void attackEvent(EntityDamageByEntityEvent e){
-        if(plugin.isPvPAllowed && e.getEntity() instanceof  Player){
+        if(!plugin.isPvPAllowed && e.getEntity() instanceof  Player){
             e.setCancelled(true);
             return;
         }

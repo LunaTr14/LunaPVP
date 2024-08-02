@@ -8,9 +8,6 @@ import org.bukkit.event.entity.EntityDeathEvent;
 
 public class DeathEventHandler implements Listener {
     private Main plugin = null;
-    public DeathEventHandler(Main plugin) {
-        this.plugin = plugin;
-    }
     public void registerHandler(Main plugin) {
         this.plugin = plugin;
         plugin.getServer().getPluginManager().registerEvents(this, plugin);
@@ -18,7 +15,7 @@ public class DeathEventHandler implements Listener {
 
     @EventHandler
     public void onEntityDeath(EntityDeathEvent e){
-        if(e instanceof Player){
+        if(e.getEntity() instanceof Player){
             Player player = (Player) e;
             player.setGameMode(GameMode.SPECTATOR);
             plugin.playerAbilityHashMap.remove(player);

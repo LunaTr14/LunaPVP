@@ -35,7 +35,7 @@ public final class Main extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        this.deathEventHandler = new DeathEventHandler(this);
+        this.deathEventHandler = new DeathEventHandler();
         deathEventHandler.registerHandler(this);
         this.joinEventHandler = new JoinEventHandler();
         joinEventHandler.registerHandler(this);
@@ -68,12 +68,6 @@ public final class Main extends JavaPlugin {
                 this.hasGameStarted = true;
             } else if (args[0].equalsIgnoreCase("disable")) {
                 this.getPluginLoader().disablePlugin(this);
-            } else if (args[0].equalsIgnoreCase("pvp") && hasGameStarted) {
-                if (args[1].equalsIgnoreCase("enable")) {
-                    this.isPvPAllowed = true;
-                } else if (args[1].equalsIgnoreCase("disable")) {
-                    this.isPvPAllowed = false;
-                }
             }
         }
 
