@@ -51,16 +51,16 @@ public final class Main extends JavaPlugin {
         if(sender.isOp() && label.equalsIgnoreCase("game")) {
             if (args[0].equalsIgnoreCase("start") && !hasGameStarted) {
                 worldBorderHandler.setCenter(0,0);
-                Location borderCenter = worldBorderHandler.getBorderCenter();
+                Location teleportLocation = worldBorderHandler.getBorderCenter();
+                teleportLocation.setY(teleportLocation.getWorld().getHighestBlockYAt(teleportLocation) + 3 );
                 for(Player onlinePlayer : this.getServer().getOnlinePlayers()){
                     onlinePlayer.setGameMode(GameMode.SURVIVAL);
                     onlinePlayer.setHealthScale(20);
                     onlinePlayer.setSaturation(20);
                     onlinePlayer.getInventory().clear();
-                    Location teleportLocation = borderCenter.add(0,onlinePlayer.getWorld().getHighestBlockYAt(borderCenter) + 3,0);
                     onlinePlayer.teleport(teleportLocation);
                 }
-                borderCenter = null;
+                teleportLocation = null;
 
                 gameTimer = new GameTimer(this, BORDER_PAUSE_SECONDS, (long) BORDER_SHRINK_SPEED_SECONDS, TIME_TILL_PVP);
                 gameTimer.startTimer();
