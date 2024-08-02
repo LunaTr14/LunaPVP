@@ -25,16 +25,20 @@ public final class Main extends JavaPlugin {
     public JoinEventHandler joinEventHandler = null;
     public PlayerInteractHandler playerInteractHandler = null;
     public AttackEventHandler attackEventHandler = null;
+    public LeaderboardHandler leaderboardHandler = null;
     public GameTimer gameTimer = null;
     public boolean isPvPAllowed = false;
     private boolean hasGameStarted = false;
 
-    private static double BORDER_PAUSE_SECONDS = 300; // Border has a delay for 5m until next zone
-    private static double BORDER_SHRINK_SPEED_SECONDS = 150; // Border takes 2.5 minutes to reach new size
-    private static double TIME_TILL_PVP = 180; // 3 Minutes until PvP is active
+
+    protected static double BORDER_PAUSE_SECONDS = 300; // Border has a delay for 5m until next zone
+    protected static double BORDER_SHRINK_SPEED_SECONDS = 150; // Border takes 2.5 minutes to reach new size
+    protected static double TIME_TILL_PVP = 180; // 3 Minutes until PvP is active
+    protected static long SCOREBOARD_UPDATE_DELAY_MS = 100;
 
     @Override
     public void onEnable() {
+        this.leaderboardHandler = new LeaderboardHandler(this);
         this.deathEventHandler = new DeathEventHandler();
         deathEventHandler.registerHandler(this);
         this.joinEventHandler = new JoinEventHandler();
@@ -43,6 +47,7 @@ public final class Main extends JavaPlugin {
         playerInteractHandler.registerHandler(this);
         this.attackEventHandler = new AttackEventHandler();
         attackEventHandler.registerHandler(this);
+
         //Registers all Event Handlers
         this.worldBorderHandler = new WorldBorderHandler(getServer().getWorlds().get(0));
     }
@@ -59,10 +64,11 @@ public final class Main extends JavaPlugin {
                     onlinePlayer.setSaturation(20);
                     onlinePlayer.getInventory().clear();
                     onlinePlayer.teleport(teleportLocation);
+                    leaderboardHandler.updateScoreboard(onlinePlayer);
                 }
                 teleportLocation = null;
 
-                gameTimer = new GameTimer(this, BORDER_PAUSE_SECONDS, (long) BORDER_SHRINK_SPEED_SECONDS, TIME_TILL_PVP);
+                gameTimer = new GameTimer(this);
                 gameTimer.startTimer();
                 this.getServer().broadcastMessage("Game has begun, Ability activation item is stick");
                 this.hasGameStarted = true;

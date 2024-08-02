@@ -1,45 +1,43 @@
 package me.luna;
 
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class GameTimer {
     private Main plugin = null;
-    private double borderShrinkPause;
-    private long borderShrinkSpeedTime;
-    private double secondsPassed = 0;
-    private double secondsUntilPvP = 0;
-    public GameTimer(Main plugin, double borderShrinkPause, long borderShrinkSpeedTime, double secondsUntilPvP){
-        // borderShrinkSpeedTime the amount of seconds for previous Border Size to New Border Size
-        // borderShrinkPause the amount of seconds it takes for the border to start another shrink
-
-        this.borderShrinkPause= borderShrinkPause;
-        this.borderShrinkSpeedTime = borderShrinkSpeedTime;
+    protected double borderShrinkPause = System.currentTimeMillis() + (Main.BORDER_PAUSE_SECONDS * 1000);
+    private double borderShrinkSpeedTime = Main.BORDER_SHRINK_SPEED_SECONDS;
+    private double secondsUntilPvP = System.currentTimeMillis() + (Main.TIME_TILL_PVP * 1000);
+    private long scoreBoardDelay = System.currentTimeMillis();
+    public GameTimer(Main plugin){
         this.plugin = plugin;
-        this.secondsUntilPvP = secondsUntilPvP;
     }
 
     public void startTimer(){
         new BukkitRunnable() {
             @Override
             public void run() {
-                if(secondsPassed > borderShrinkPause){
-                    borderShrinkPause = borderShrinkPause + borderShrinkPause;
+                if(borderShrinkPause <= System.currentTimeMillis()){
+
                     long borderSize = (long) plugin.worldBorderHandler.getBorderSize();
                     if(borderSize > 200) {
-                        plugin.worldBorderHandler.shrinkBorder(borderSize / 2, borderShrinkSpeedTime);
+                        plugin.worldBorderHandler.shrinkBorder(borderSize / 2, (long) borderShrinkSpeedTime);
                     }
                     else if(50 <= borderSize && borderSize <= 200){
-                        plugin.worldBorderHandler.shrinkBorder(borderSize - 50, borderShrinkSpeedTime);
+                        plugin.worldBorderHandler.shrinkBorder(borderSize - 50, (long) borderShrinkSpeedTime);
                     }
+                    borderShrinkPause = System.currentTimeMillis() + (Main.BORDER_PAUSE_SECONDS * 1000);
                 }
-                secondsPassed = secondsPassed + 1;
-                if(secondsPassed % 30 == 0){
-                    System.gc();
-                }
-                if (!plugin.isPvPAllowed && secondsUntilPvP % secondsPassed == 0) {
+                if(System.currentTimeMillis() > scoreBoardDelay){
+                    for(String p : plugin.playerAbilityHashMap.keySet()) {
+                        plugin.leaderboardHandler.updateScoreboard(plugin.getServer().getPlayer(p));
+                    }
+                    scoreBoardDelay = System.currentTimeMillis() + Main.SCOREBOARD_UPDATE_DELAY_MS;
+                    }
+                if (!plugin.isPvPAllowed && System.currentTimeMillis() >= secondsUntilPvP) {
                     plugin.isPvPAllowed = true;
                 }
             }
-        }.runTaskTimer(plugin,20,20);
+        }.runTaskTimer(plugin,10,10);
     }
 }
