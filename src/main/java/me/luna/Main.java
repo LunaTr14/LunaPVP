@@ -26,6 +26,9 @@ public final class Main extends JavaPlugin {
     public AttackEventHandler attackEventHandler = null;
     public GameTimer gameTimer = null;
     public boolean isPvPAllowed = false;
+    private static double BORDER_PAUSE_SECONDS = 300; // Border has a delay for 5m until next zone
+    private static double BORDER_SHRINK_SPEED_SECONDS = 150; // Border takes 2.5 minutes to reach new size
+    private static double TIME_TILL_PVP = 180; // 3 Minutes until PvP is active
 
     public long getNow(){
         return System.currentTimeMillis();
@@ -50,27 +53,35 @@ public final class Main extends JavaPlugin {
     }
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if(sender.isOp() && label.equalsIgnoreCase("game")){
-            if(args[0].equalsIgnoreCase("start") && ! gameController.hasGameStarted ) {
-                gameController.startGame();
-                this.getServer().broadcastMessage("Game has begun, Ability activation item is stick");
-            }
-            else if(args[0].equalsIgnoreCase("disable")){
-                this.getPluginLoader().disablePlugin(this);
-            }
-            else if(args[0].equalsIgnoreCase("pvp")){
-                if(args[1].equalsIgnoreCase("enable")){
-                    this.eventHandler.isPvPAllowed = true;
+        if(sender.isOp() && label.equalsIgnoreCase("game")) {
+            if (args[0].equalsIgnoreCase("start") && !hasGameStarted) {
+                worldBorderHandler.setCenter(0,0);
+                for(Player onlinePlayer : this.getServer().getOnlinePlayers()){
+                    onlinePlayer.setGameMode(GameMode.SURVIVAL);
+                    onlinePlayer.setHealthScale(20);
+                    onlinePlayer.setSaturation(20);
+                    onlinePlayer.getInventory().clear();
+                    onlinePlayer.teleport(worldBorderHandler.getBorderCenter().add(0,3,0));
                 }
-                else if (args[1].equalsIgnoreCase("disable")){
-                    this.eventHandler.isPvPAllowed = false;
+
+                gameTimer = new GameTimer(this, BORDER_PAUSE_SECONDS, (long) BORDER_SHRINK_SPEED_SECONDS, TIME_TILL_PVP);
+                gameTimer.startTimer();
+                this.getServer().broadcastMessage("Game has begun, Ability activation item is stick");
+                this.hasGameStarted = true;
+            } else if (args[0].equalsIgnoreCase("disable")) {
+                this.getPluginLoader().disablePlugin(this);
+            } else if (args[0].equalsIgnoreCase("pvp") && hasGameStarted) {
+                if (args[1].equalsIgnoreCase("enable")) {
+                    this.isPvPAllowed = true;
+                } else if (args[1].equalsIgnoreCase("disable")) {
+                    this.isPvPAllowed = false;
                 }
             }
         }
 
         else if(label.equalsIgnoreCase("class") && sender instanceof Player && args.length > 0) {
-            String class_name = args[0];
-            if(gameController.hasGameStarted){
+            String className = args[0];
+            if(hasGameStarted){
                 sender.sendMessage("Game has started, Unable to select Class");
                 return true;
             }
@@ -112,8 +123,11 @@ public final class Main extends JavaPlugin {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        if(command.getName().equalsIgnoreCase("game") && sender.isOp()){
-            return List.of(new String[]{"start", "disable"});
+        String commandName = command.getName();
+        if( sender.isOp()){
+            if(commandName.equalsIgnoreCase("game")){
+                return List.of(new String[]{"start", "disable"});
+            }
         }
         if (commandName.equalsIgnoreCase("class") || commandName.equalsIgnoreCase("about")){
             return List.of(new String[]{"strength","gravity","paralysis"});
