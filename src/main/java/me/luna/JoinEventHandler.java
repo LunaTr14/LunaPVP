@@ -1,5 +1,6 @@
 package me.luna;
 
+import me.luna.ability.Strength;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -16,7 +17,7 @@ public class JoinEventHandler implements Listener {
         if(plugin.playerAbilityHashMap.containsKey(e.getPlayer().getDisplayName())){
             return;
         }
-        plugin.playerAbilityHashMap.put(e.getPlayer().getDisplayName(),null);
+        plugin.playerAbilityHashMap.put(e.getPlayer().getDisplayName(),new Strength());
     }
 
 }
