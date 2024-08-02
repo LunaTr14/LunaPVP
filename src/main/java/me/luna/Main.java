@@ -26,14 +26,12 @@ public final class Main extends JavaPlugin {
     public AttackEventHandler attackEventHandler = null;
     public GameTimer gameTimer = null;
     public boolean isPvPAllowed = false;
+    private boolean hasGameStarted = false;
+
     private static double BORDER_PAUSE_SECONDS = 300; // Border has a delay for 5m until next zone
     private static double BORDER_SHRINK_SPEED_SECONDS = 150; // Border takes 2.5 minutes to reach new size
     private static double TIME_TILL_PVP = 180; // 3 Minutes until PvP is active
 
-    public long getNow(){
-        return System.currentTimeMillis();
-    }
-    private static boolean IS_DEBUG = true;
     @Override
     public void onEnable() {
         this.deathEventHandler = new DeathEventHandler(this);
@@ -46,10 +44,6 @@ public final class Main extends JavaPlugin {
         attackEventHandler.registerHandler(this);
         //Registers all Event Handlers
         this.worldBorderHandler = new WorldBorderHandler(getServer().getWorlds().get(0));
-        if(IS_DEBUG){
-            this.worldBorderHandler.testBorderSize();
-            this.worldBorderHandler.testBorderCenter();
-        }
     }
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
