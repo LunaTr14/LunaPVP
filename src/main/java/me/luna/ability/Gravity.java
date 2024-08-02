@@ -15,16 +15,17 @@ public class Gravity extends AbilityTemplate {
 
     @Override
     public boolean activate(Event e) {
-        if (isEventPlayerInteract(e)) {
+        if (e instanceof  PlayerInteractEvent) {
             PlayerInteractEvent interactEvent = (PlayerInteractEvent) e;
-            Player p = ((PlayerInteractEvent) e).getPlayer();
-            if (isRightClick(interactEvent.getAction()) || isLeftClick(interactEvent.getAction())) {
+            Player p = interactEvent.getPlayer();
+            if (isRightClick(interactEvent.getAction())) {
                 p.getPlayer().teleport(p.getLocation().add(0, 10, 0));
                 p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 20 * 15, 1));
             }
         } else if (isEventEntityHit(e)) {
             EntityDamageByEntityEvent damageEvent = (EntityDamageByEntityEvent) e;
             damageEvent.getEntity().teleport(damageEvent.getDamager().getLocation().add(0, 7.5, 0));
+            addDelay();
         }
         return true;
     }

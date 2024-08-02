@@ -1,22 +1,29 @@
 package me.luna.ability;
 
-import org.bukkit.entity.Entity;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 
 
 public class AbilityTemplate {
 
     public int delay = 5;
+    public double nextActivation = 0;
+    public boolean hasDelayCompleted(){
+        return nextActivation < System.currentTimeMillis();
+    }
+    public void addDelay(){
+        this.nextActivation = System.currentTimeMillis() + (delay * 1000L);
+    }
     public boolean activate(Event e) {
         return true;
     }
-    protected boolean isEventPlayerInteract(Event e){
-        return e instanceof PlayerInteractEvent;
-    }
 
+    public boolean isPlayerHoldingStick(Player p){
+        return p.getInventory().getItemInMainHand().getType() == Material.STICK;
+    }
     protected boolean isEventEntityHit(Event e){
         return e instanceof EntityDamageByEntityEvent;
     }
@@ -25,14 +32,6 @@ public class AbilityTemplate {
     }
     protected boolean isRightClick(Action action){
         return action == Action.RIGHT_CLICK_AIR || action == Action.RIGHT_CLICK_BLOCK;
-    }
-
-    protected Entity getDamager(EntityDamageByEntityEvent e){
-        return e.getDamager();
-    }
-
-    protected Entity getTarget(EntityDamageByEntityEvent e){
-        return e.getEntity();
     }
 
 }

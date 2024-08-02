@@ -1,7 +1,7 @@
 name: LunaPVP
 version: '${project.version}'
 main: me.luna.Main
-api-version: 1.17
+api-version: 1.20
 authors: [Luna]
 commands:
   game:
@@ -10,3 +10,6 @@ commands:
   class:
     usage: "Usage: /class [Ability]"
     description: Works for all players before game start
+  about:
+    usage: "Usage: /about [Ability]"
+    description: Describes the abilities of each class
