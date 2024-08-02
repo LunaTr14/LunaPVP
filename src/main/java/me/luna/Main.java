@@ -26,6 +26,7 @@ public final class Main extends JavaPlugin {
     public PlayerInteractHandler playerInteractHandler = null;
     public AttackEventHandler attackEventHandler = null;
     public LeaderboardHandler leaderboardHandler = null;
+    public OnDisconnectEvent disconnectEvent = null;
     public GameTimer gameTimer = null;
     public boolean isPvPAllowed = false;
     private boolean hasGameStarted = false;
@@ -48,6 +49,8 @@ public final class Main extends JavaPlugin {
         playerInteractHandler.registerHandler(this);
         this.attackEventHandler = new AttackEventHandler();
         attackEventHandler.registerHandler(this);
+        this.disconnectEvent = new OnDisconnectEvent();
+        disconnectEvent.registerHandler(this);
 
         //Registers all Event Handlers
         this.worldBorderHandler = new WorldBorderHandler(getServer().getWorlds().get(0));
