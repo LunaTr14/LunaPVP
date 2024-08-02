@@ -21,7 +21,12 @@ public final class Main extends JavaPlugin {
 
     public volatile HashMap<Player,Integer> playerAbilityHashMap = new HashMap<>();
     public WorldBorderHandler worldBorderHandler = null;
-    public EventHandler eventHandler = new EventHandler();
+    public DeathEventHandler deathEventHandler = null;
+    public JoinEventHandler joinEventHandler = null;
+    public PlayerInteractHandler playerInteractHandler = null;
+    public AttackEventHandler attackEventHandler = null;
+    public GameTimer gameTimer = null;
+    public boolean isPvPAllowed = false;
 
     public long getNow(){
         return System.currentTimeMillis();
@@ -29,7 +34,15 @@ public final class Main extends JavaPlugin {
     private static boolean IS_DEBUG = true;
     @Override
     public void onEnable() {
-        eventHandler.registerHandler(this);
+        this.deathEventHandler = new DeathEventHandler(this);
+        deathEventHandler.registerHandler(this);
+        this.joinEventHandler = new JoinEventHandler();
+        joinEventHandler.registerHandler(this);
+        this.playerInteractHandler = new PlayerInteractHandler();
+        playerInteractHandler.registerHandler(this);
+        this.attackEventHandler = new AttackEventHandler();
+        attackEventHandler.registerHandler(this);
+        //Registers all Event Handlers
         this.worldBorderHandler = new WorldBorderHandler(getServer().getWorlds().get(0));
         if(IS_DEBUG){
             this.worldBorderHandler.testBorderSize();

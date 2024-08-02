@@ -1,6 +1,6 @@
 package me.luna;
 
-import org.bukkit.GameMode;
+import me.luna.ability.AbilityTemplate;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,8 +16,14 @@ public class PlayerInteractHandler implements Listener {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent e){
-            Player player = (Player) e;
-            player.setGameMode(GameMode.SPECTATOR);
-            plugin.playerAbilityHashMap.get(player).activate(e);
+            Player player = e.getPlayer();
+            AbilityTemplate abilityObject = plugin.playerAbilityHashMap.get(player.getDisplayName());
+        if(abilityObject.hasDelayCompleted() && abilityObject.isPlayerHoldingStick(player)) {
+            abilityObject.activate(e);
+            abilityObject.addDelay();
+        }
+        player = null;
+        abilityObject = null;
+        System.gc();
     }
 }

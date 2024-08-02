@@ -16,7 +16,8 @@ public class WorldBorderHandler {
     }
 
     public void setCenter(double xCenter, double zCenter){
-        this.worldBorder.setCenter(xCenter,zCenter);
+        int highestY = worldBorder.getWorld().getHighestBlockYAt((int) xCenter, (int)zCenter);
+        this.worldBorder.setCenter(new Location(worldBorder.getWorld(),xCenter,highestY,zCenter));
     }
 
     public double getBorderSize(){
