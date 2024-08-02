@@ -8,6 +8,7 @@ Purpose: Main Function to start game
 package me.luna;
 
 import me.luna.ability.*;
+import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -17,9 +18,7 @@ import java.util.*;
 
 public final class Main extends JavaPlugin {
 
-    public final static AbilityTemplate[] ABILITY_ARRAY = {new Strength(), new Gravity(), new Paralysis()};
-
-    public volatile HashMap<Player,Integer> playerAbilityHashMap = new HashMap<>();
+    public volatile HashMap<String,AbilityTemplate> playerAbilityHashMap = new HashMap<>();
     public WorldBorderHandler worldBorderHandler = null;
     public DeathEventHandler deathEventHandler = null;
     public JoinEventHandler joinEventHandler = null;
@@ -75,17 +74,18 @@ public final class Main extends JavaPlugin {
                 sender.sendMessage("Game has started, Unable to select Class");
                 return true;
             }
-            switch (class_name){
+            String playerDisplayName = ((Player) sender).getDisplayName();
+            switch (className){
                     case "strength":
-                        this.playerAbilityHashMap.put(((Player) sender).getPlayer(), 0);
+                        this.playerAbilityHashMap.put(playerDisplayName,new Strength());
                         sender.sendMessage("Strength has been Selected");
                         break;
                     case "gravity":
-                        this.playerAbilityHashMap.put(((Player) sender).getPlayer(), 1);
+                        this.playerAbilityHashMap.put(playerDisplayName,new Gravity());
                         sender.sendMessage("Gravity has been Selected");
                         break;
                     case "paralysis":
-                        this.playerAbilityHashMap.put(((Player) sender).getPlayer(), 2);
+                        this.playerAbilityHashMap.put(playerDisplayName,new Paralysis());
                         sender.sendMessage("Paralysis has been Selected");
                         break;
                 default:
@@ -93,17 +93,17 @@ public final class Main extends JavaPlugin {
                 }
         }
         else if (label.equalsIgnoreCase("about") && args.length > 0){
-            String class_name = args[0];
-            switch (class_name) {
+            String className = args[0];
+            switch (className) {
                 case "strength":
-                    sender.sendMessage("Strength multiplies damage of a stick by a factor of "+ ((Strength) ABILITY_ARRAY[0]).DAMAGE_BOOSTER);
+                    sender.sendMessage("Strength multiplies damage of a stick by a factor of "+ new Strength().DAMAGE_BOOSTER);
                     break;
                 case "gravity":
                     sender.sendMessage("Gravity on Right Click: Teleports player to the sky and applies slow falling");
                     sender.sendMessage("Gravity on Player attack: Teleports attacked player to the sky without slow falling");
                     break;
                 case "paralysis":
-                    sender.sendMessage("Paralysis on Player Attack: Applies Blindness and Slowness" + ((Paralysis) ABILITY_ARRAY[2]).POTION_LENGTH / 20 +" seconds");
+                    sender.sendMessage("Paralysis on Player Attack: Applies Blindness and Slowness" + new Paralysis().POTION_LENGTH / 20 +" seconds");
                     break;
             }
         }
@@ -115,7 +115,7 @@ public final class Main extends JavaPlugin {
         if(command.getName().equalsIgnoreCase("game") && sender.isOp()){
             return List.of(new String[]{"start", "disable"});
         }
-        else if (command.getName().equalsIgnoreCase("class") || command.getName().equalsIgnoreCase("about")){
+        if (commandName.equalsIgnoreCase("class") || commandName.equalsIgnoreCase("about")){
             return List.of(new String[]{"strength","gravity","paralysis"});
         }
         return super.onTabComplete(sender, command, alias, args);
