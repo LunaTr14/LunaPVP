@@ -1,6 +1,7 @@
 package me.luna;
 
 import me.luna.ability.AbilityTemplate;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,7 +17,7 @@ public class PlayerInteractHandler implements Listener {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent e){
-        if(tickDelay > System.currentTimeMillis()){
+        if(tickDelay > System.currentTimeMillis() || e.getPlayer().getGameMode() == GameMode.SPECTATOR){
             return;
         }
         Player player = e.getPlayer();

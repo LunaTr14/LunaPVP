@@ -16,9 +16,12 @@ public class DeathEventHandler implements Listener {
     @EventHandler
     public void onEntityDeath(EntityDeathEvent e){
         if(e.getEntity() instanceof Player){
-            Player player = (Player) e;
+            Player player = (Player) e.getEntity();
             player.setGameMode(GameMode.SPECTATOR);
-            plugin.playerAbilityHashMap.remove(player);
+            player.getInventory().clear();
+            if(plugin.playerAbilityHashMap.containsKey(player.getDisplayName())){
+                plugin.playerAbilityHashMap.remove(player.getDisplayName());
+            }
             System.gc();
         }
     }
