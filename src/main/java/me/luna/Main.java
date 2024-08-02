@@ -77,6 +77,9 @@ public final class Main extends JavaPlugin {
             } else if (args[0].equalsIgnoreCase("disable")) {
                 this.getPluginLoader().disablePlugin(this);
             }
+            else{
+                sender.sendMessage("This command does not exist");
+            }
         }
 
         else if(label.equalsIgnoreCase("class") && sender instanceof Player && args.length > 0) {
@@ -103,20 +106,23 @@ public final class Main extends JavaPlugin {
                     sender.sendMessage("Invalid Class Name");
                 }
         }
-        else if (label.equalsIgnoreCase("about") && args.length > 0){
+        else if (label.equalsIgnoreCase("about") && args.length > 0) {
             String className = args[0];
             switch (className) {
                 case "strength":
-                    sender.sendMessage("Strength multiplies damage of a stick by a factor of "+ new Strength().DAMAGE_BOOSTER);
+                    sender.sendMessage("Strength multiplies damage of a stick by a factor of " + new Strength().DAMAGE_BOOSTER);
                     break;
                 case "gravity":
                     sender.sendMessage("Gravity on Right Click: Teleports player to the sky and applies slow falling");
                     sender.sendMessage("Gravity on Player attack: Teleports attacked player to the sky without slow falling");
                     break;
                 case "paralysis":
-                    sender.sendMessage("Paralysis on Player Attack: Applies Blindness and Slowness" + new Paralysis().POTION_LENGTH / 20 +" seconds");
+                    sender.sendMessage("Paralysis on Player Attack: Applies Blindness and Slowness" + new Paralysis().POTION_LENGTH / 20 + " seconds");
                     break;
+                default:
+                    sender.sendMessage("No class exists with that name");
             }
+
         }
         System.gc();
         return true;
