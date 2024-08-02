@@ -7,7 +7,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 
 public class PlayerInteractHandler implements Listener {
-
+    private volatile long tickDelay = System.currentTimeMillis();
     private Main plugin = null;
     public void registerHandler(Main plugin) {
         this.plugin = plugin;
@@ -16,8 +16,11 @@ public class PlayerInteractHandler implements Listener {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEvent e){
-            Player player = e.getPlayer();
-            AbilityTemplate abilityObject = plugin.playerAbilityHashMap.get(player.getDisplayName());
+        if(tickDelay > System.currentTimeMillis()){
+            return;
+        }
+        Player player = e.getPlayer();
+        AbilityTemplate abilityObject = plugin.playerAbilityHashMap.get(player.getDisplayName());
         if(abilityObject.hasDelayCompleted() && abilityObject.isPlayerHoldingStick(player)) {
             abilityObject.activate(e);
             abilityObject.addDelay();
@@ -25,5 +28,6 @@ public class PlayerInteractHandler implements Listener {
         player = null;
         abilityObject = null;
         System.gc();
+        tickDelay = System.currentTimeMillis() + 1000;
     }
 }
