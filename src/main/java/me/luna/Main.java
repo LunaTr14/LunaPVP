@@ -9,6 +9,7 @@ package me.luna;
 
 import me.luna.ability.*;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -50,13 +51,16 @@ public final class Main extends JavaPlugin {
         if(sender.isOp() && label.equalsIgnoreCase("game")) {
             if (args[0].equalsIgnoreCase("start") && !hasGameStarted) {
                 worldBorderHandler.setCenter(0,0);
+                Location borderCenter = worldBorderHandler.getBorderCenter();
                 for(Player onlinePlayer : this.getServer().getOnlinePlayers()){
                     onlinePlayer.setGameMode(GameMode.SURVIVAL);
                     onlinePlayer.setHealthScale(20);
                     onlinePlayer.setSaturation(20);
                     onlinePlayer.getInventory().clear();
-                    onlinePlayer.teleport(worldBorderHandler.getBorderCenter().add(0,3,0));
+                    Location teleportLocation = borderCenter.add(0,onlinePlayer.getWorld().getHighestBlockYAt(borderCenter) + 3,0);
+                    onlinePlayer.teleport(teleportLocation);
                 }
+                borderCenter = null;
 
                 gameTimer = new GameTimer(this, BORDER_PAUSE_SECONDS, (long) BORDER_SHRINK_SPEED_SECONDS, TIME_TILL_PVP);
                 gameTimer.startTimer();
@@ -112,6 +116,7 @@ public final class Main extends JavaPlugin {
                     break;
             }
         }
+        System.gc();
         return true;
     }
 
