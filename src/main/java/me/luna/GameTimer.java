@@ -29,8 +29,12 @@ public class GameTimer {
                     borderShrinkPause = System.currentTimeMillis() + (Main.BORDER_PAUSE_SECONDS * 1000);
                 }
                 if(System.currentTimeMillis() > scoreBoardDelay){
-                    for(String p : plugin.playerAbilityHashMap.keySet()) {
-                        plugin.leaderboardHandler.updateScoreboard(plugin.getServer().getPlayer(p));
+                    for(String username : plugin.playerAbilityHashMap.keySet()) {
+                        Player player = plugin.getServer().getPlayer(username);
+                        plugin.leaderboardHandler.updateScoreboard(player);
+                        if(plugin.playerAbilityHashMap.get(player).hasDelayCompleted()){
+                            VisualAudioHandler.playAbilityReady(player);
+                        }
                     }
                     scoreBoardDelay = System.currentTimeMillis() + Main.SCOREBOARD_UPDATE_DELAY_MS;
                     }
