@@ -16,7 +16,6 @@ public class Paralysis extends AbilityTemplate{
     @Override
     public boolean activate(Event e) {
         if(isEventEntityHit(e)){
-            System.out.println(this.nextActivation);
             EntityDamageByEntityEvent damageEvent = (EntityDamageByEntityEvent) e;
             Player receiver = (Player) damageEvent.getEntity();
             receiver.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,POTION_LENGTH,9999));
