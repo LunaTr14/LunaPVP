@@ -25,8 +25,8 @@ public class Gravity extends AbilityTemplate {
         } else if (isEventEntityHit(e)) {
             EntityDamageByEntityEvent damageEvent = (EntityDamageByEntityEvent) e;
             damageEvent.getEntity().teleport(damageEvent.getDamager().getLocation().add(0, 7.5, 0));
-            addDelay();
         }
+        addDelay();
         return true;
     }
 }
