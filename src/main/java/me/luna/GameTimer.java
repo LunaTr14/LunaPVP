@@ -1,5 +1,6 @@
 package me.luna;
 
+import me.luna.ability.AbilityTemplate;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -29,8 +30,14 @@ public class GameTimer {
                     borderShrinkPause = System.currentTimeMillis() + (Main.BORDER_PAUSE_SECONDS * 1000);
                 }
                 if(System.currentTimeMillis() > scoreBoardDelay){
-                    for(String p : plugin.playerAbilityHashMap.keySet()) {
-                        plugin.leaderboardHandler.updateScoreboard(plugin.getServer().getPlayer(p));
+                    for(String username : plugin.playerAbilityHashMap.keySet()) {
+                        Player player = plugin.getServer().getPlayer(username);
+                        plugin.leaderboardHandler.updateScoreboard(player);
+                        AbilityTemplate ability = plugin.playerAbilityHashMap.get(player.getDisplayName());
+                        if(ability.hasDelayCompleted() && !ability.hasReadyAudioPlayed){
+                            ability.hasReadyAudioPlayed = true;
+                            VisualAudioHandler.playAbilityReady(player);
+                        }
                     }
                     scoreBoardDelay = System.currentTimeMillis() + Main.SCOREBOARD_UPDATE_DELAY_MS;
                     }

@@ -1,7 +1,7 @@
 name: LunaPVP
 version: '${project.version}'
 main: me.luna.Main
-api-version: 1.20
+api-version: 1.21
 authors: [Luna]
 commands:
   game:

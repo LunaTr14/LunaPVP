@@ -1,5 +1,6 @@
 package me.luna.ability;
 
+import me.luna.VisualAudioHandler;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -21,10 +22,13 @@ public class Gravity extends AbilityTemplate {
             if (isRightClick(interactEvent.getAction())) {
                 p.getPlayer().teleport(p.getLocation().add(0, 10, 0));
                 p.addPotionEffect(new PotionEffect(PotionEffectType.SLOW_FALLING, 20 * 15, 1));
+                VisualAudioHandler.playAbilityActivate(p);
+                addDelay();
             }
         } else if (isEventEntityHit(e)) {
             EntityDamageByEntityEvent damageEvent = (EntityDamageByEntityEvent) e;
             damageEvent.getEntity().teleport(damageEvent.getDamager().getLocation().add(0, 7.5, 0));
+            VisualAudioHandler.playAbilityActivate((Player) damageEvent.getDamager()) ;
             addDelay();
         }
         return true;

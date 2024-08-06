@@ -1,5 +1,7 @@
 package me.luna.ability;
 
+import me.luna.VisualAudioHandler;
+import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 
@@ -16,6 +18,7 @@ public class Strength extends AbilityTemplate{
         double baseDamage = damageEvent.getDamage();
         damageEvent.setDamage(baseDamage * DAMAGE_BOOSTER);
         addDelay();
+        VisualAudioHandler.playAbilityActivate((Player) damageEvent.getDamager());
         return true;
         }
 }

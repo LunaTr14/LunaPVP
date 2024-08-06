@@ -11,6 +11,7 @@ public class AbilityTemplate {
 
     public int delay = 5;
     public double nextActivation = 0;
+    public boolean hasReadyAudioPlayed = false;
     public boolean hasDelayCompleted(){
         return nextActivation < System.currentTimeMillis();
     }
