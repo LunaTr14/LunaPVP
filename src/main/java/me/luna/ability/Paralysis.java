@@ -1,5 +1,6 @@
 package me.luna.ability;
 
+import me.luna.VisualAudioHandler;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -21,6 +22,7 @@ public class Paralysis extends AbilityTemplate{
             receiver.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,POTION_LENGTH,9999));
             receiver.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,POTION_LENGTH,9999));
             addDelay();
+            VisualAudioHandler.playAbilityActivate((Player) damageEvent.getDamager());
             return true;
         }
         return false;
