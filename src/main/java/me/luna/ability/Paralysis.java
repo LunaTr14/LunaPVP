@@ -18,7 +18,7 @@ public class Paralysis extends AbilityTemplate{
         if(isEventEntityHit(e)){
             EntityDamageByEntityEvent damageEvent = (EntityDamageByEntityEvent) e;
             Player receiver = (Player) damageEvent.getEntity();
-            receiver.addPotionEffect(new PotionEffect(PotionEffectType.SLOW,POTION_LENGTH,9999));
+            receiver.addPotionEffect(new PotionEffect(PotionEffectType.SLOWNESS,POTION_LENGTH,9999));
             receiver.addPotionEffect(new PotionEffect(PotionEffectType.BLINDNESS,POTION_LENGTH,9999));
             addDelay();
             VisualAudioHandler.playAbilityActivate((Player) damageEvent.getDamager());
