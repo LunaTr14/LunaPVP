@@ -28,8 +28,8 @@ public class Gravity extends AbilityTemplate {
             EntityDamageByEntityEvent damageEvent = (EntityDamageByEntityEvent) e;
             damageEvent.getEntity().teleport(damageEvent.getDamager().getLocation().add(0, 7.5, 0));
             VisualAudioHandler.playAbilityActivate((Player) damageEvent.getDamager()) ;
-            addDelay();
         }
+        addDelay();
         return true;
     }
 }
